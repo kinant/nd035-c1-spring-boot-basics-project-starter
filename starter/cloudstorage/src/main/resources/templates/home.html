@@ -19,7 +19,7 @@
                 <nav style="clear: right;">
                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
                         <a class="nav-item nav-link active" id="nav-files-tab" data-toggle="tab" href="#nav-files" role="tab" aria-controls="nav-files" aria-selected="true">Files</a>
-                        <a class="nav-item nav-link" id="nav-notes-tab" data-toggle="tab" href="#nav-notes" role="tab" aria-controls="nav-notes" aria-selected="false">Notes</a>
+                        <a class="nav-item nav-link" id="nav-notes-tab" data-toggle="tab" href="#nav-notes" data-url="/nav-notes" role="tab" aria-controls="nav-notes" aria-selected="false">Notes</a>
                         <a class="nav-item nav-link" id="nav-credentials-tab" data-toggle="tab" href="#nav-credentials" role="tab" aria-controls="nav-credentials" aria-selected="false">Credentials</a>
                     </div>
                 </nav>
@@ -189,6 +189,22 @@
         <script th:src="@{/js/jquery-slim.min.js}"></script>
         <script th:src="@{/js/popper.min.js}"></script>
         <script th:src="@{/js/bootstrap.min.js}"></script>
+
+        <script type="text/javascript">
+
+            $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                console.log("tab shown...");
+                localStorage.setItem('activeTab', $(e.target).attr('href'));
+            });
+
+            var activeTab = localStorage.getItem('activeTab');
+
+            if (activeTab) {
+                console.log("active tab: ")
+                $('.nav-tabs a[href="' + activeTab + '"]').tab('show');
+            }
+
+        </script>
 
         <!--For opening the note modal-->
         <script type="text/javascript">
