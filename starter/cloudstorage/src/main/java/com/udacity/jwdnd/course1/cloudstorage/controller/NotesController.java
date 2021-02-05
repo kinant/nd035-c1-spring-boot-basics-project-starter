@@ -42,7 +42,7 @@ public class NotesController {
                 null
         );
         this.noteService.createNote(n, authentication.getName());
-        return "home";
+        return "_notes";
     }
 
 }
