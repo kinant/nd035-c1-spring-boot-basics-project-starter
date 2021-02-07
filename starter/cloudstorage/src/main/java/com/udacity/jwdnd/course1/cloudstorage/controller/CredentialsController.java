@@ -37,7 +37,7 @@ public class CredentialsController {
     }
 
     @PostMapping()
-    public String addNote(@ModelAttribute("newCred") CredentialForm credForm, Authentication authentication, Model model){
+    public String addOrUpdateCredential(@ModelAttribute("newCred") CredentialForm credForm, Authentication authentication, Model model){
 
         System.out.println("===== (POST) CRED =========");
         System.out.println("CRED ID: " + credForm.getCredentialid());
