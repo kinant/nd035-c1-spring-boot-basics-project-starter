@@ -58,10 +58,10 @@
         <!--For opening the note modal-->
         <script type="text/javascript">
             // For opening the note modal
-            function showNoteModal(noteId, noteTitle, noteDescription) {
-                $('#note-id').val(noteId ? noteId : '');
-                $('#note-title').val(noteTitle ? noteTitle : '');
-                $('#note-description').val(noteDescription ? noteDescription : '');
+            function showNoteModal(note) {
+                $('#note-id').val(note && note.noteId ? note.noteId : null);
+                $('#note-title').val(note && note.noteTitle ? note.noteTitle : '');
+                $('#note-description').val(note && note.noteDescription ? note.noteDescription : '');
                 $('#noteModal').modal('show');
             }
 

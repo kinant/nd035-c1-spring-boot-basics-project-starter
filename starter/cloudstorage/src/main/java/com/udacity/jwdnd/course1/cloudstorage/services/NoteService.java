@@ -37,4 +37,17 @@ public class NoteService {
 
         return -1;
     }
+
+    public Note getNote(int noteId){
+        return noteMapper.getNote(noteId);
+    }
+
+    public Integer updateNote(Note note){
+        return noteMapper.updateNote(note);
+    }
+
+    public Integer deleteNote(Integer noteId){
+        return noteMapper.deleteNote(noteId);
+    }
+
 }

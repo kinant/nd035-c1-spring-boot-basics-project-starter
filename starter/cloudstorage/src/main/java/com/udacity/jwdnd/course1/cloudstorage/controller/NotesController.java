@@ -3,23 +3,23 @@ package com.udacity.jwdnd.course1.cloudstorage.controller;
 import com.udacity.jwdnd.course1.cloudstorage.model.Note;
 import com.udacity.jwdnd.course1.cloudstorage.model.NoteForm;
 import com.udacity.jwdnd.course1.cloudstorage.services.NoteService;
+import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/home/notes")
 public class NotesController {
 
     private final NoteService noteService;
+    private final UserService userService;
 
-    public NotesController(NoteService noteService) {
+    public NotesController(NoteService noteService, UserService userService) {
         this.noteService = noteService;
+        this.userService = userService;
     }
 
     @GetMapping()
@@ -34,15 +34,35 @@ public class NotesController {
     public String addNote(@ModelAttribute("newNote") NoteForm noteForm, Authentication authentication, Model model){
 
         System.out.println("===== (POST) NOTE =========");
+        System.out.println("NOTE ID: " + noteForm.getNoteid());
 
-        Note n = new Note(
-                null,
-                noteForm.getNotetitle(),
-                noteForm.getNotedescription(),
-                null
-        );
-        this.noteService.createNote(n, authentication.getName());
-        return "_notes";
+        if(noteForm.getNoteid() == null) {
+            // create new note
+            Note n = new Note(
+                    null,
+                    noteForm.getNotetitle(),
+                    noteForm.getNotedescription(),
+                    null
+            );
+            this.noteService.createNote(n, authentication.getName());
+        } else {
+            // update note
+            Note n = new Note(
+                    noteForm.getNoteid(),
+                    noteForm.getNotetitle(),
+                    noteForm.getNotedescription(),
+                    userService.getUserId(authentication.getName())
+            );
+            this.noteService.updateNote(n);
+        }
+        return "home";
     }
 
+    @GetMapping("/delete")
+    public String deleteNote(@RequestParam int noteid){
+        System.out.println("===== (GET) DELETE NOTE =========");
+        System.out.println("Deleting note with id: " + noteid);
+        noteService.deleteNote(noteid);
+        return "home";
+    }
 }
