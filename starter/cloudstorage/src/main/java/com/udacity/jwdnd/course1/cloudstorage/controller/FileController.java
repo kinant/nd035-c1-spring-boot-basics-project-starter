@@ -1,5 +1,6 @@
 package com.udacity.jwdnd.course1.cloudstorage.controller;
 
+import com.udacity.jwdnd.course1.cloudstorage.model.File;
 import com.udacity.jwdnd.course1.cloudstorage.services.FileService;
 import com.udacity.jwdnd.course1.cloudstorage.storage.StorageFileNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
+import java.util.List;
 
 @Controller
 @RequestMapping("/home/files")
@@ -29,7 +31,18 @@ public class FileController {
     @GetMapping()
     public String listUplodadedFiles(Model model, Authentication authentication){
         System.out.println("ATTEMPTING TO GET LIST OF USER FIES: ");
+
+        List<File> allFiles = fileService.getFilesByUser(authentication.getName());
+
+        for (File file:
+             allFiles) {
+            System.out.println(file.toString());
+        }
+
         model.addAttribute("files", fileService.getFilesByUser(authentication.getName()));
+
+
+
         return "_files";
     }
 

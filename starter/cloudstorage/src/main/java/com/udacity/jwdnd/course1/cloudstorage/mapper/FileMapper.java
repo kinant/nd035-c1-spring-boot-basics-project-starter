@@ -8,11 +8,11 @@ import java.util.List;
 @Mapper
 public interface FileMapper {
 
-    @Select("SELECT * FROM FILES WHERE userid = #{userid}")
+    @Select("SELECT fileId, filename, contenttype, filesize, userid, null AS filedata FROM FILES WHERE userid = #{userid}")
     public List<File> getFilesByUserId(Integer userid);
 
-    @Insert("INSERT INTO FILES (filename, contenttype, userid, filedata) "+
-            "VALUES (#{filename}, #{contenttype}, #{userid}, #{filedata})")
+    @Insert("INSERT INTO FILES (filename, contenttype, filesize, userid, filedata) "+
+            "VALUES (#{filename}, #{contenttype}, #{filesize}, #{userid}, #{filedata})")
     @Options(useGeneratedKeys = true, keyProperty = "fileId")
     public Integer addFile(File file);
 

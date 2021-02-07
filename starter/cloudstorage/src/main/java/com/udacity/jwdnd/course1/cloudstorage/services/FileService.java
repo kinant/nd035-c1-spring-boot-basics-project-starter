@@ -28,8 +28,9 @@ public class FileService {
         Integer userid = userService.getUserId(username);
         File f = new File (
                 null,
-                file.getName(),
+                file.getOriginalFilename(),
                 file.getContentType(),
+                String.valueOf(file.getSize()),
                 userid,
                 file.getBytes()
         );
