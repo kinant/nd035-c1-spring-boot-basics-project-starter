@@ -31,26 +31,26 @@ public class NotesController {
     }
 
     @PostMapping()
-    public String addNote(@ModelAttribute("newNote") NoteForm noteForm, Authentication authentication, Model model){
+    public String addNote(@ModelAttribute("newNote") Note note, Authentication authentication, Model model){
 
         System.out.println("===== (POST) NOTE =========");
-        System.out.println("NOTE ID: " + noteForm.getNoteid());
+        System.out.println("NOTE ID: " + note.getNoteId());
 
         if(noteForm.getNoteid() == null) {
             // create new note
             Note n = new Note(
                     null,
-                    noteForm.getNotetitle(),
-                    noteForm.getNotedescription(),
+                    note.getNoteTitle(),
+                    note.getNoteDescription(),
                     null
             );
             this.noteService.createNote(n, authentication.getName());
         } else {
             // update note
             Note n = new Note(
-                    noteForm.getNoteid(),
-                    noteForm.getNotetitle(),
-                    noteForm.getNotedescription(),
+                    note.getNoteId(),
+                    note.getNoteTitle(),
+                    note.getNoteDescription(),
                     userService.getUserId(authentication.getName())
             );
             this.noteService.updateNote(n);
