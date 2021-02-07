@@ -25,8 +25,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
+        // TODO: fix this for accessing console
+        // https://stackoverflow.com/questions/53395200/h2-console-is-not-showing-in-browser/53399807#53399807
+        http.csrf().disable();
+        http.headers().frameOptions().sameOrigin();
+        //http.headers().frameOptions().disable();
+
+
         http.authorizeRequests()
-                .antMatchers("/signup", "/css/**", "/js/**").permitAll()
+                .antMatchers("/signup", "/css/**", "/h2-console/**", "/js/**").permitAll()
                 .anyRequest().authenticated();
 
         http.formLogin()
