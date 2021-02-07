@@ -45,7 +45,7 @@ public class CredentialService {
 
             cred.setKey(encodedKey);
             cred.setPassword(encryptedPassword);
-            cred.setUserId(userId);
+            cred.setUserid(userId);
 
             return credMapper.addCredential(cred);
         }

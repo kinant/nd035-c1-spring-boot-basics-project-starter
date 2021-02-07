@@ -31,7 +31,7 @@ public class NoteService {
         Integer userId = userService.getUserId(username);
 
         if(userId != null){
-            note.setUserId(userId);
+            note.setUserid(userId);
             return noteMapper.addNote(note);
         }
 

@@ -1,12 +1,8 @@
 package com.udacity.jwdnd.course1.cloudstorage.controller;
 
 import com.udacity.jwdnd.course1.cloudstorage.model.Credential;
-import com.udacity.jwdnd.course1.cloudstorage.model.CredentialForm;
-import com.udacity.jwdnd.course1.cloudstorage.model.Note;
-import com.udacity.jwdnd.course1.cloudstorage.model.NoteForm;
 import com.udacity.jwdnd.course1.cloudstorage.services.CredentialService;
 import com.udacity.jwdnd.course1.cloudstorage.services.EncryptionService;
-import com.udacity.jwdnd.course1.cloudstorage.services.NoteService;
 import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -28,7 +24,7 @@ public class CredentialsController {
     }
 
     @GetMapping()
-    public String credentialsView(@ModelAttribute("newCred") CredentialForm credForm, Authentication authentication, Model model){
+    public String credentialsView(@ModelAttribute("cred") Credential cred, Authentication authentication, Model model){
         System.out.println("===== GET CRED =========");
 
         String username = authentication.getName();
@@ -37,30 +33,30 @@ public class CredentialsController {
     }
 
     @PostMapping()
-    public String addOrUpdateCredential(@ModelAttribute("newCred") CredentialForm credForm, Authentication authentication, Model model){
+    public String addOrUpdateCredential(@ModelAttribute("cred") Credential cred, Authentication authentication, Model model){
 
         System.out.println("===== (POST) CRED =========");
-        System.out.println("CRED ID: " + credForm.getCredentialid());
+        System.out.println("CRED ID: " + cred.getCredentialid());
 
-        if(credForm.getCredentialid() == null) {
+        if(cred.getCredentialid() == null) {
             // create new note
             Credential c = new Credential(
                     null,
-                    credForm.getUrl(),
+                    cred.getUrl(),
                     null,
-                    credForm.getUsername(),
-                    credForm.getPassword(),
+                    cred.getUsername(),
+                    cred.getPassword(),
                     null
             );
             this.credentialService.createCredential(c, authentication.getName());
         } else {
             // update note
             Credential c = new Credential(
-                    credForm.getCredentialid(),
-                    credForm.getUrl(),
+                    cred.getCredentialid(),
+                    cred.getUrl(),
                     null,
-                    credForm.getUsername(),
-                    credForm.getPassword(),
+                    cred.getUsername(),
+                    cred.getPassword(),
                     null
             );
             this.credentialService.updateCredential(c);

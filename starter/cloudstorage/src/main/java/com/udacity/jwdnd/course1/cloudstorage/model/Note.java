@@ -6,42 +6,42 @@ public class Note {
     private String notedescription;
     private Integer userid;
 
-    public Note(Integer noteId, String noteTitle, String noteDescription, Integer userId) {
-        this.noteid = noteId;
-        this.notetitle = noteTitle;
-        this.notedescription = noteDescription;
-        this.userid = userId;
+    public Note(Integer noteid, String notetitle, String notedescription, Integer userid) {
+        this.noteid = noteid;
+        this.notetitle = notetitle;
+        this.notedescription = notedescription;
+        this.userid = userid;
     }
 
-    public Integer getNoteId() {
+    public Integer getNoteid() {
         return noteid;
     }
 
-    public void setNoteId(Integer noteId) {
-        this.noteid = noteId;
+    public void setNoteid(Integer noteid) {
+        this.noteid = noteid;
     }
 
-    public String getNoteTitle() {
+    public String getNotetitle() {
         return notetitle;
     }
 
-    public void setNoteTitle(String noteTitle) {
-        this.notetitle = noteTitle;
+    public void setNotetitle(String notetitle) {
+        this.notetitle = notetitle;
     }
 
-    public String getNoteDescription() {
+    public String getNotedescription() {
         return notedescription;
     }
 
-    public void setNoteDescription(String noteDescription) {
-        this.notedescription = noteDescription;
+    public void setNotedescription(String notedescription) {
+        this.notedescription = notedescription;
     }
 
-    public Integer getUserId() {
+    public Integer getUserid() {
         return userid;
     }
 
-    public void setUserId(Integer userId) {
-        this.userid = userId;
+    public void setUserid(Integer userid) {
+        this.userid = userid;
     }
 }

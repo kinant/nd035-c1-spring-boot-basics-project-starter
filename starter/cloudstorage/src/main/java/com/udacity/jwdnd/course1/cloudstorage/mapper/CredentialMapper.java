@@ -9,21 +9,21 @@ import java.util.List;
 @Mapper
 public interface CredentialMapper {
 
-    @Select("SELECT * FROM CREDENTIALS WHERE userId= #{userId}")
-    public List<Credential> getCredsByUserId(Integer useId);
+    @Select("SELECT * FROM CREDENTIALS WHERE userid= #{userid}")
+    public List<Credential> getCredsByUserId(Integer useid);
 
-    @Select("SELECT * FROM CREDENTIALS WHERE credentialId= #{credId}")
-    public Credential getCredential(Integer credId);
+    @Select("SELECT * FROM CREDENTIALS WHERE credentialid= #{credid}")
+    public Credential getCredential(Integer credid);
 
-    @Insert("INSERT INTO CREDENTIALS (url, username, key, password, userId) " +
-            "VALUES (#{url}, #{username}, #{key}, #{password}, #{userId})")
-    @Options(useGeneratedKeys = true, keyProperty = "credentialId")
+    @Insert("INSERT INTO CREDENTIALS (url, username, key, password, userid) " +
+            "VALUES (#{url}, #{username}, #{key}, #{password}, #{userid})")
+    @Options(useGeneratedKeys = true, keyProperty = "credentialid")
     public Integer addCredential(Credential credential);
 
     @Update("UPDATE CREDENTIALS SET username = #{username}, password = #{password}, url = #{url}, key = #{key} " +
-            "WHERE credentialId = #{credentialId}")
+            "WHERE credentialid = #{credentialid}")
     public Integer updateCredential(Credential credential);
 
-    @Delete("DELETE FROM CREDENTIALS WHERE credentialId = #{credId}")
-    public Integer deleteCredential(Integer credId);
+    @Delete("DELETE FROM CREDENTIALS WHERE credentialid = #{credid}")
+    public Integer deleteCredential(Integer credid);
 }

@@ -1,10 +1,8 @@
 package com.udacity.jwdnd.course1.cloudstorage.controller;
 
 import com.udacity.jwdnd.course1.cloudstorage.model.Note;
-import com.udacity.jwdnd.course1.cloudstorage.model.NoteForm;
 import com.udacity.jwdnd.course1.cloudstorage.services.NoteService;
 import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,7 +21,7 @@ public class NotesController {
     }
 
     @GetMapping()
-    public String notesView(@ModelAttribute("newNote") NoteForm noteForm, Authentication authentication, Model model){
+    public String notesView(@ModelAttribute Note note, Authentication authentication, Model model){
         String username = authentication.getName();
         model.addAttribute("notes", noteService.getNotes(username));
 
@@ -31,26 +29,26 @@ public class NotesController {
     }
 
     @PostMapping()
-    public String addNote(@ModelAttribute("newNote") Note note, Authentication authentication, Model model){
+    public String addNote(@ModelAttribute Note note, Authentication authentication, Model model){
 
         System.out.println("===== (POST) NOTE =========");
-        System.out.println("NOTE ID: " + note.getNoteId());
+        System.out.println("NOTE ID: " + note.getNoteid());
 
-        if(noteForm.getNoteid() == null) {
+        if(note.getNoteid() == null) {
             // create new note
             Note n = new Note(
                     null,
-                    note.getNoteTitle(),
-                    note.getNoteDescription(),
+                    note.getNotetitle(),
+                    note.getNotedescription(),
                     null
             );
             this.noteService.createNote(n, authentication.getName());
         } else {
             // update note
             Note n = new Note(
-                    note.getNoteId(),
-                    note.getNoteTitle(),
-                    note.getNoteDescription(),
+                    note.getNoteid(),
+                    note.getNotetitle(),
+                    note.getNotedescription(),
                     userService.getUserId(authentication.getName())
             );
             this.noteService.updateNote(n);

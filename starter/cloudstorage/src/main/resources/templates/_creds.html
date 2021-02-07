@@ -17,13 +17,13 @@
             <td>
                 <button
                         th:onclick="javascript: showCredentialModal(
-                            [[${cred.credentialId}]],
+                            [[${cred.credentialid}]],
                             [[${cred.url}]],
                             [[${cred.username}]],
                             [[${@encryptionService.decryptValue(cred.password, cred.key)}]]
                         )"
                         type="button" class="btn btn-success">Edit</button>
-                <a th:href="@{/home/creds/delete(credid=${cred.credentialId})}" class="btn btn-danger">Delete</a>
+                <a th:href="@{/home/creds/delete(credid=${cred.credentialid})}" class="btn btn-danger">Delete</a>
             </td>
             <th th:text="${cred.url}" scope="row">Example Credential URL</th>
             <td th:text="${cred.username}" >Example Credential Username</td>
@@ -43,7 +43,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form th:object = "${newCred}" th:action="@{/home/creds}" action="#" method="POST">
+                <form th:object = "${cred}" th:action="@{/home/creds}" action="#" method="POST">
                     <input th:field="*{credentialid}" type="hidden" name="credentialId" id="credential-id">
                     <div class="form-group">
                         <label for="note-title" class="col-form-label">URL</label>

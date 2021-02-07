@@ -17,10 +17,10 @@
             <tr>
                 <td>
                     <button type="button" th:onclick="javascript:showNoteModal([[${note}]])" class="btn btn-success">Edit</button>
-                    <a th:href="@{/home/notes/delete(noteid=${note.noteId})}" class="btn btn-danger">Delete</a>
+                    <a th:href="@{/home/notes/delete(noteid=${note.noteid})}" class="btn btn-danger">Delete</a>
                 </td>
-                <th th:text="${note.noteTitle}" scope="row">Example Note Title</th>
-                <td th:text="${note.noteDescription}">Example Note Description </td>
+                <th th:text="${note.notetitle}" scope="row">Example Note Title</th>
+                <td th:text="${note.notedescription}">Example Note Description </td>
             </tr>
         </div>
         </tbody>
@@ -37,7 +37,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form th:object="${newNote}" th:action="@{/home/notes}" action="#" method="POST">
+                <form th:object="${note}" th:action="@{/home/notes}" action="#" method="POST">
                     <input th:field="*{noteid}" type="hidden" name="noteId" id="note-id">
                     <div class="form-group">
                         <label for="note-title" class="col-form-label">Title</label>
