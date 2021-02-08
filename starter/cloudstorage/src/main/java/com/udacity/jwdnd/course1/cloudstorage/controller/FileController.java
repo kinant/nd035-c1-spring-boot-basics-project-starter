@@ -3,7 +3,10 @@ package com.udacity.jwdnd.course1.cloudstorage.controller;
 import com.udacity.jwdnd.course1.cloudstorage.model.File;
 import com.udacity.jwdnd.course1.cloudstorage.services.FileService;
 import com.udacity.jwdnd.course1.cloudstorage.storage.StorageFileNotFoundException;
+import org.apache.ibatis.annotations.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.swing.text.Document;
 import java.io.IOException;
 import java.util.List;
 
@@ -65,6 +69,32 @@ public class FileController {
         } catch (IOException e){
             e.printStackTrace();
         }
+        return "home";
+    }
+
+
+    // https://knowledge.udacity.com/questions/271629
+    @GetMapping("/download")
+    public ResponseEntity downloadFile(@RequestParam Integer fileid) {
+
+        File file = fileService.getFileByFileId(fileid);
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(file.getContenttype()))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
+                .body(file.getFiledata());
+
+        // Document document = documentDao.findByDocName(fileName);
+
+        //return ResponseEntity.ok()
+        //    .contentType(MediaType.parseMediaType(contentType))
+        //    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"")
+        //    .body(document.getFile());
+    }
+
+    @GetMapping("/delete")
+    public String deleteFile(@RequestParam Integer fileid){
+        this.fileService.deleteFile(fileid);
         return "home";
     }
 

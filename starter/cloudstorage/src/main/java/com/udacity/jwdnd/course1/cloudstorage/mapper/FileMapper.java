@@ -16,6 +16,10 @@ public interface FileMapper {
     @Options(useGeneratedKeys = true, keyProperty = "fileId")
     public Integer addFile(File file);
 
-    @Delete("DELETE FROM FILES WHERE fileId = {#fileId}")
+    @Delete("DELETE FROM FILES WHERE fileId = #{fileId}")
     public Integer deleteFile(Integer fileId);
+
+    @Select("SELECT * FROM FILES WHERE fileId = #{fileId}")
+    public File getFileByFileId(Integer fileId);
+
 }
