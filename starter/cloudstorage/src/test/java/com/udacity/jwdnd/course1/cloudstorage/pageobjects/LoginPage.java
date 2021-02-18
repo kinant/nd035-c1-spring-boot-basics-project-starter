@@ -17,8 +17,8 @@ public class LoginPage {
     }
 
     public void inputLoginCredentials(){
-        usernameField.sendKeys("jsmith");
-        passwordField.sendKeys("password123");
+        usernameField.sendKeys("admin");
+        passwordField.sendKeys("pass");
     }
 
     public void submit(){
