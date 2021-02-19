@@ -13,7 +13,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="cred: ${credentials}">
+        <tr th:each="cred: ${credentials}" name="credential">
             <td>
                 <button
                         th:onclick="javascript: showCredentialModal(
@@ -25,9 +25,9 @@
                         type="button" class="btn btn-success">Edit</button>
                 <a th:href="@{/home/creds/delete(credid=${cred.credentialid})}" class="btn btn-danger">Delete</a>
             </td>
-            <th th:text="${cred.url}" scope="row">Example Credential URL</th>
-            <td th:text="${cred.username}" >Example Credential Username</td>
-            <td th:text="${cred.password}">Example Credential Password</td>
+            <th name = "credential-url" th:text="${cred.url}" scope="row">Example Credential URL</th>
+            <td name = "credential-username" th:text="${cred.username}" >Example Credential Username</td>
+            <td name = "credential-password" th:text="${cred.password}">Example Credential Password</td>
         </tr>
         </tbody>
     </table>

@@ -76,6 +76,7 @@ class CredentialsTests {
 		Thread.sleep(1000);
 		homePage.goToCredsTab();
 		Thread.sleep(1000);
-
+		credentialsTab.getCredentialRows();
+		Thread.sleep(1000);
 	}
 }

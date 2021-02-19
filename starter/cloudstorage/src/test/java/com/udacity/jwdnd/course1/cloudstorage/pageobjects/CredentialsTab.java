@@ -6,6 +6,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CredentialsTab {
@@ -45,4 +46,30 @@ public class CredentialsTab {
     public void submit(){
         passwordInput.submit();
     }
+
+    public List<CredentialRow> getCredentialRows(){
+        List<CredentialRow> credentialRows = new ArrayList<>();
+        List<WebElement> credentialsList = credentialTable.findElements(By.name("credential"));
+
+        for(WebElement credential: credentialsList){
+            WebElement urlElement = credential.findElement(By.name("credential-url"));
+            WebElement userElement = credential.findElement(By.name("credential-username"));
+            WebElement passElement = credential.findElement(By.name("credential-password"));
+
+            String url = urlElement.getAttribute("innerHTML");
+            String username = userElement.getAttribute("innerHTML");
+            String password = passElement.getAttribute("innerHTML");
+
+            System.out.println("=========== PRINTING NOTE =============");
+            System.out.println("URL: " + url);
+            System.out.println("USERNAME: " + username);
+            System.out.println("PASSWORD: " + password);
+
+            CredentialRow cRow = new CredentialRow(url, username, password);
+            credentialRows.add(cRow);
+        }
+
+        return credentialRows;
+    }
+
 }
