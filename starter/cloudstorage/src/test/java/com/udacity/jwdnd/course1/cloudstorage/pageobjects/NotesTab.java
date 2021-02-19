@@ -6,6 +6,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class NotesTab {
@@ -29,29 +30,49 @@ public class NotesTab {
         addNoteBtn.click();
     }
 
-    public void inputNewNote(String title){
+    public void inputNewNote(String title, String description){
         titleInput.clear();
         descriptionInput.clear();
         titleInput.sendKeys(title);
-        descriptionInput.sendKeys("This is note " + title);
+        descriptionInput.sendKeys(description);
     }
 
     public void submit(){
         descriptionInput.submit();
     }
 
+    public List<NoteRow> getNoteRows(){
+        List<NoteRow> noteRows = new ArrayList<>();
+        List<WebElement> notesList = notesTable.findElements(By.name("note"));
+
+        for(WebElement note: notesList){
+            System.out.println("=========== PRINTING NOTE =============");
+            WebElement titleElement = note.findElement(By.name("note-title"));
+            WebElement descElement = note.findElement(By.name("note-description"));
+
+            String title = titleElement.getAttribute("innerHTML");
+            String description = descElement.getAttribute("innerHTML");
+
+            System.out.println("Title: " + title);
+            System.out.println("Description: " + description);
+
+            NoteRow nRow = new NoteRow(title, description);
+            noteRows.add(nRow);
+        }
+
+        return noteRows;
+    }
+
     // https://knowledge.udacity.com/questions/346030
-    public boolean checkNoteCreated(String title){
+    public boolean checkNoteExists(String title, String description){
         boolean noteExists = false;
+        List<NoteRow> noteRows = getNoteRows();
 
-        List<WebElement> notes = notesTable.findElements(By.tagName("th"));
-
-        for(WebElement note: notes){
-            if(note.getAttribute("innerHTML").equals(title)){
+        for(NoteRow nRow: noteRows){
+            if(nRow.getTitle().equals(title) && nRow.getDescription().equals(description)){
                 noteExists = true;
             }
         }
-
         return noteExists;
     }
 
@@ -84,8 +105,7 @@ public class NotesTab {
     }
 
     public int getNumNotes(){
-        List<WebElement> notes = notesTable.findElements(By.id("note"));
-        System.out.println("NUM NOTES: " + notes.size());
-        return notes.size();
+        List<NoteRow> rows = getNoteRows();
+        return rows.size();
     }
 }

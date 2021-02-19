@@ -1,9 +1,7 @@
 package com.udacity.jwdnd.course1.cloudstorage.tests;
 
 import com.udacity.jwdnd.course1.cloudstorage.pageobjects.HomePage;
-import com.udacity.jwdnd.course1.cloudstorage.pageobjects.LoginPage;
 import com.udacity.jwdnd.course1.cloudstorage.pageobjects.NotesTab;
-import com.udacity.jwdnd.course1.cloudstorage.pageobjects.SignupPage;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
@@ -20,6 +18,13 @@ class NotesTests {
 	private int port;
 
 	private WebDriver driver;
+	private HomePage homePage;
+	private NotesTab notesTab;
+
+	private static final String TEST_TITLE = "Title 1";
+	private static final String TEST_DESCRIPTION = "This is description for title 1";
+	private static final String TEST_UPDATED_TITLE = "Updated Title 2";
+	private static final String TEST_UPDATED_DESCRIPTION = "This is description for updated note";
 
 	@BeforeAll
 	static void beforeAll() {
@@ -27,10 +32,10 @@ class NotesTests {
 	}
 
 	@BeforeEach
-	public void beforeEach() throws InterruptedException {
+	public void beforeEach() {
 		this.driver = new ChromeDriver();
-		signup();
-		login();
+		this.homePage = new HomePage(driver);
+		this.notesTab = new NotesTab(driver);
 	}
 
 	@AfterEach
@@ -40,25 +45,20 @@ class NotesTests {
 		}
 	}
 
-	public void signup() throws InterruptedException {
-//		driver.get("http://localhost:" + this.port + "/signup");
-//		SignupPage signupPage = new SignupPage(driver);
-//		signupPage.inputNewUser();
-//		signupPage.submitSignup();
+	public void addNewNote() throws InterruptedException {
+		notesTab.addNote();
+		Thread.sleep(1000);
+		notesTab.inputNewNote(TEST_TITLE, TEST_DESCRIPTION);
+		Thread.sleep(1000);
+		notesTab.submit();
 	}
-
-	public void login() throws InterruptedException {
-//		driver.get("http://localhost:" + this.port + "/login");
-//		LoginPage loginPage = new LoginPage(driver);
-//		loginPage.inputLoginCredentials();
-//		loginPage.submit();
-	}
-
 
 	@Test
 	@Order(1)
 	public void getNotesTabTest() throws InterruptedException {
-		HomePage homePage = new HomePage(driver);
+		TestHelper.signup(driver, port);
+		Thread.sleep(1000);
+		TestHelper.login(driver, port);
 		Thread.sleep(1000);
 		homePage.goToNotesTab();
 		Thread.sleep(1000);
@@ -69,53 +69,49 @@ class NotesTests {
 	@Test
 	@Order(2)
 	public void addNoteTest() throws InterruptedException {
-		HomePage homePage = new HomePage(driver);
+		TestHelper.login(driver, port);
 		Thread.sleep(1000);
 		homePage.goToNotesTab();
 		Thread.sleep(1000);
-		NotesTab notesTab = new NotesTab(driver);
-		notesTab.addNote();
-		Thread.sleep(1000);
-		notesTab.inputNewNote("Title 1");
-		Thread.sleep(1000);
-		notesTab.submit();
+		addNewNote();
 		Thread.sleep(1000);
 		homePage.goToNotesTab();
 		Thread.sleep(1000);
-		Assertions.assertEquals(true, notesTab.checkNoteCreated("Title 1"));
+		Assertions.assertEquals(true, notesTab.checkNoteExists(TEST_TITLE, TEST_DESCRIPTION));
 		Thread.sleep(1000);
 	}
 
 	@Test
 	@Order(3)
 	public void updateNoteTest() throws InterruptedException {
-		HomePage homePage = new HomePage(driver);
-		NotesTab notesTab = new NotesTab(driver);
-		addNoteTest();
+		TestHelper.login(driver, port);
+		Thread.sleep(1000);
+		homePage.goToNotesTab();
 		Thread.sleep(1000);
 		int numNotes = notesTab.getNumNotes();
 		Assertions.assertTrue(numNotes >= 1);
 		Thread.sleep(1000);
 		notesTab.clickEditNote();
 		Thread.sleep(1000);
-		notesTab.inputNewNote("Updated Title 1");
+		notesTab.inputNewNote(TEST_UPDATED_TITLE, TEST_UPDATED_DESCRIPTION);
 		Thread.sleep(1000);
 		notesTab.submit();
 		Thread.sleep(1000);
 		homePage.goToNotesTab();
 		Thread.sleep(1000);
+		// check num notes remains the same
 		Assertions.assertEquals(numNotes, notesTab.getNumNotes());
-		Thread.sleep(1000);
-		Assertions.assertTrue(notesTab.checkNoteCreated("Updated Title 1"));
+		// check old note doesnt exist
+		Assertions.assertFalse(notesTab.checkNoteExists(TEST_TITLE, TEST_DESCRIPTION));
+		// check note was updated
+		Assertions.assertTrue(notesTab.checkNoteExists(TEST_UPDATED_TITLE, TEST_UPDATED_DESCRIPTION));
 		Thread.sleep(1000);
 	}
 
 	@Test
 	@Order(4)
 	public void deleteNoteTest() throws InterruptedException {
-		HomePage homePage = new HomePage(driver);
-		NotesTab notesTab = new NotesTab(driver);
-		addNoteTest();
+		TestHelper.login(driver, port);
 		Thread.sleep(1000);
 		homePage.goToNotesTab();
 		Thread.sleep(1000);
@@ -128,5 +124,4 @@ class NotesTests {
 		Assertions.assertEquals(numNotes - 1, notesTab.getNumNotes());
 		Thread.sleep(1000);
 	}
-
 }

@@ -14,13 +14,13 @@
         </thead>
         <tbody>
         <div th:each="note: ${notes}">
-            <tr id="note">
+            <tr name="note">
                 <td>
                     <button type="button" th:onclick="javascript:showNoteModal([[${note}]])" class="btn btn-success">Edit</button>
                     <a th:href="@{/home/notes/delete(noteid=${note.noteid})}" class="btn btn-danger">Delete</a>
                 </td>
-                <th th:text="${note.notetitle}" scope="row">Example Note Title</th>
-                <td th:text="${note.notedescription}">Example Note Description </td>
+                <th name ="note-title" th:text="${note.notetitle}" scope="row">Example Note Title</th>
+                <td name = "note-description" th:text="${note.notedescription}">Example Note Description </td>
             </tr>
         </div>
         </tbody>
