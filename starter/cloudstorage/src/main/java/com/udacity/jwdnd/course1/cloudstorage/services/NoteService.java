@@ -18,7 +18,7 @@ public class NoteService {
     }
 
     public List<Note> getNotes(String username){
-        Integer userId = userService.getUserId(username);
+        Integer userId = userService.getCurrentUserId();
 
         if(userId != null){
             return noteMapper.getNotesByUserId(userId);
@@ -28,7 +28,7 @@ public class NoteService {
     }
 
     public int createNote(Note note, String username){
-        Integer userId = userService.getUserId(username);
+        Integer userId = userService.getCurrentUserId();
 
         if(userId != null){
             note.setUserid(userId);

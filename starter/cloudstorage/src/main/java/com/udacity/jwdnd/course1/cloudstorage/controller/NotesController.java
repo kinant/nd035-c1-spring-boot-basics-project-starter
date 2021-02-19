@@ -49,7 +49,7 @@ public class NotesController {
                     note.getNoteid(),
                     note.getNotetitle(),
                     note.getNotedescription(),
-                    userService.getUserId(authentication.getName())
+                    userService.getCurrentUserId()
             );
             this.noteService.updateNote(n);
         }

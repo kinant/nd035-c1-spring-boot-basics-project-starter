@@ -20,12 +20,12 @@ public class FileService {
     }
 
     public List<File> getFilesByUser(String username){
-        Integer userid = userService.getUserId(username);
+        Integer userid = userService.getCurrentUserId();
         return fileMapper.getFilesByUserId(userid);
     }
 
     public Integer addFile(MultipartFile file, String username) throws IOException {
-        Integer userid = userService.getUserId(username);
+        Integer userid = userService.getCurrentUserId();
         File f = new File (
                 null,
                 file.getOriginalFilename(),

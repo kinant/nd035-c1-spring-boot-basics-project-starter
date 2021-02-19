@@ -10,10 +10,15 @@ import java.util.List;
 public interface CredentialMapper {
 
     @Select("SELECT * FROM CREDENTIALS WHERE userid= #{userid}")
-    public List<Credential> getCredsByUserId(Integer useid);
+    public List<Credential> getCredsByUserId(Integer userid);
 
     @Select("SELECT * FROM CREDENTIALS WHERE credentialid= #{credid}")
     public Credential getCredential(Integer credid);
+
+    @Select("SELECT * FROM CREDENTIALS WHERE userid=#{userid}" +
+            " AND url = #{url}" +
+            " AND username = #{username}")
+    public Credential getCredentialByURLAndUsername(Integer userid, String url, String username);
 
     @Insert("INSERT INTO CREDENTIALS (url, username, key, password, userid) " +
             "VALUES (#{url}, #{username}, #{key}, #{password}, #{userid})")

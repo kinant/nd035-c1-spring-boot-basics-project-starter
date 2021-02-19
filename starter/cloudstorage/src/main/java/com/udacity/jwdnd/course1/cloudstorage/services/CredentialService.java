@@ -24,7 +24,7 @@ public class CredentialService {
     }
 
     public List<Credential> getCredentials(String username){
-        Integer userId = userService.getUserId(username);
+        Integer userId = userService.getCurrentUserId();
 
         if(userId != null){
             return credMapper.getCredsByUserId(userId);
@@ -47,7 +47,7 @@ public class CredentialService {
     }
 
     public int createCredential(Credential credential, String username){
-        Integer userId = userService.getUserId(username);
+        Integer userId = userService.getCurrentUserId();
 
         if(userId != null){
             Credential secureCredential = getSecureCredential(credential);
@@ -85,6 +85,22 @@ public class CredentialService {
         credential.setUserid(old_credential.getUserid());
         System.out.println("NEW CREDENTIAL: " + credential.toString());
         return credMapper.updateCredential(credential);
+    }
+
+    public Credential getCredentialByURLAndUserName(String url, String username){
+        System.out.println("======== GETTING CREDENTIAL BY URL AND USERNAME ==============");
+        Integer userId = userService.getCurrentUserId();
+
+        System.out.println("User id: " + userId);
+        System.out.println("url: " + url);
+        System.out.println("username: " + username);
+
+        if(userId != null) {
+            Credential c = credMapper.getCredentialByURLAndUsername(userId, url, username);
+            System.out.println("Credential: " + c.toString());
+            return c;
+        }
+        return null;
     }
 
     public Integer deleteCredential(Integer credId){

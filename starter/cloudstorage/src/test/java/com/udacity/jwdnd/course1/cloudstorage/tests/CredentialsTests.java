@@ -1,11 +1,13 @@
 package com.udacity.jwdnd.course1.cloudstorage.tests;
 
 import com.udacity.jwdnd.course1.cloudstorage.pageobjects.*;
+import com.udacity.jwdnd.course1.cloudstorage.services.CredentialService;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 
@@ -24,6 +26,9 @@ class CredentialsTests {
 	private static final String TEST_CREDENTIAL_PASSWORD = "password123";
 
 	private String test_salt;
+
+	@Autowired
+	private CredentialService credentialService;
 
 	@BeforeAll
 	static void beforeAll() {
@@ -76,7 +81,7 @@ class CredentialsTests {
 		Thread.sleep(1000);
 		homePage.goToCredsTab();
 		Thread.sleep(1000);
-		credentialsTab.getCredentialRows();
+		Assertions.assertTrue(credentialsTab.checkSecureCredentialExists(TEST_CREDENTIAL_URL, TEST_CREDENTIAL_USERNAME, TEST_CREDENTIAL_PASSWORD, this.credentialService));
 		Thread.sleep(1000);
 	}
 }

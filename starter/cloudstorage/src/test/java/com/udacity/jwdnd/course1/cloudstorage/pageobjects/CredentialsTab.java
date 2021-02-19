@@ -1,5 +1,8 @@
 package com.udacity.jwdnd.course1.cloudstorage.pageobjects;
 
+import com.udacity.jwdnd.course1.cloudstorage.model.Credential;
+import com.udacity.jwdnd.course1.cloudstorage.services.CredentialService;
+import com.udacity.jwdnd.course1.cloudstorage.services.EncryptionService;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -72,4 +75,21 @@ public class CredentialsTab {
         return credentialRows;
     }
 
+    public boolean checkSecureCredentialExists(String url, String username, String password, CredentialService credentialService){
+        boolean secureCredentialExists =  false;
+
+        List<CredentialRow> credentialRows = getCredentialRows();
+        EncryptionService encryptionService = new EncryptionService();
+
+        for(CredentialRow cRow: credentialRows){
+            Credential credential = credentialService.getCredentialByURLAndUserName(url, username);
+            String checkPassword = encryptionService.encryptValue(password, credential.getKey());
+
+            if(cRow.getUrl().equals(url) && cRow.getUsername().equals(username) && cRow.getPassword().equals(checkPassword)){
+                secureCredentialExists = true;
+            }
+        }
+
+        return secureCredentialExists;
+    }
 }
