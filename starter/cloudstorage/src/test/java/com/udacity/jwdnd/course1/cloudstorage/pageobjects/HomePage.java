@@ -10,6 +10,9 @@ public class HomePage {
     @FindBy(id = "notes-link")
     public WebElement notesLink;
 
+    @FindBy(id = "creds-link")
+    public WebElement credsLink;
+
     public HomePage(WebDriver driver) {
         PageFactory.initElements(driver, this);
     }
@@ -18,4 +21,7 @@ public class HomePage {
         notesLink.click();
     }
 
+    public void goToCredsTab(){
+        credsLink.click();
+    }
 }

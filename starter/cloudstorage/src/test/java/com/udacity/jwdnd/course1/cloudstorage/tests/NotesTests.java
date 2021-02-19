@@ -13,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class NotesTests {
 
 	@LocalServerPort
@@ -40,22 +41,22 @@ class NotesTests {
 	}
 
 	public void signup() throws InterruptedException {
-		driver.get("http://localhost:" + this.port + "/signup");
-		SignupPage signupPage = new SignupPage(driver);
-		signupPage.inputNewUser();
-		signupPage.submitSignup();
+//		driver.get("http://localhost:" + this.port + "/signup");
+//		SignupPage signupPage = new SignupPage(driver);
+//		signupPage.inputNewUser();
+//		signupPage.submitSignup();
 	}
 
 	public void login() throws InterruptedException {
-		driver.get("http://localhost:" + this.port + "/login");
-		LoginPage loginPage = new LoginPage(driver);
-		loginPage.inputLoginCredentials();
-		Thread.sleep(1000);
-		loginPage.submit();
+//		driver.get("http://localhost:" + this.port + "/login");
+//		LoginPage loginPage = new LoginPage(driver);
+//		loginPage.inputLoginCredentials();
+//		loginPage.submit();
 	}
 
 
 	@Test
+	@Order(1)
 	public void getNotesTabTest() throws InterruptedException {
 		HomePage homePage = new HomePage(driver);
 		Thread.sleep(1000);
@@ -66,6 +67,7 @@ class NotesTests {
 	}
 
 	@Test
+	@Order(2)
 	public void addNoteTest() throws InterruptedException {
 		HomePage homePage = new HomePage(driver);
 		Thread.sleep(1000);
@@ -85,6 +87,7 @@ class NotesTests {
 	}
 
 	@Test
+	@Order(3)
 	public void updateNoteTest() throws InterruptedException {
 		HomePage homePage = new HomePage(driver);
 		NotesTab notesTab = new NotesTab(driver);
@@ -108,6 +111,7 @@ class NotesTests {
 	}
 
 	@Test
+	@Order(4)
 	public void deleteNoteTest() throws InterruptedException {
 		HomePage homePage = new HomePage(driver);
 		NotesTab notesTab = new NotesTab(driver);

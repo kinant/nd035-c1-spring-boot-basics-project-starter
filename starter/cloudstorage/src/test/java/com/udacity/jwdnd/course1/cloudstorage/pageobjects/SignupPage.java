@@ -30,11 +30,11 @@ public class SignupPage {
         passwordField.submit();
     }
 
-    public void inputNewUser(){
-        firstNameField.sendKeys("John");
-        lastNameField.sendKeys("Smith");
-        usernameField.sendKeys("admin");
-        passwordField.sendKeys("pass");
+    public void inputNewUser(String first_name, String last_name, String username, String password){
+        firstNameField.sendKeys(first_name);
+        lastNameField.sendKeys(last_name);
+        usernameField.sendKeys(username);
+        passwordField.sendKeys(password);
     }
 
     public String getSuccessMessage(){
