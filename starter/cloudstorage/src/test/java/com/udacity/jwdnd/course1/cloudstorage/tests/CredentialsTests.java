@@ -16,6 +16,14 @@ class CredentialsTests {
 	private int port;
 
 	private WebDriver driver;
+	private HomePage homePage;
+	private CredentialsTab credentialsTab;
+
+	private static final String TEST_CREDENTIAL_URL = "www.google.com";
+	private static final String TEST_CREDENTIAL_USERNAME = "user1";
+	private static final String TEST_CREDENTIAL_PASSWORD = "password123";
+
+	private String test_salt;
 
 	@BeforeAll
 	static void beforeAll() {
@@ -25,8 +33,8 @@ class CredentialsTests {
 	@BeforeEach
 	public void beforeEach() throws InterruptedException {
 		this.driver = new ChromeDriver();
-		signup();
-		login();
+		this.homePage = new HomePage(driver);
+		this.credentialsTab = new CredentialsTab(driver);
 	}
 
 	@AfterEach
@@ -36,25 +44,12 @@ class CredentialsTests {
 		}
 	}
 
-	public void signup() throws InterruptedException {
-//		driver.get("http://localhost:" + this.port + "/signup");
-//		SignupPage signupPage = new SignupPage(driver);
-//		signupPage.inputNewUser();
-//		signupPage.submitSignup();
-	}
-
-	public void login() throws InterruptedException {
-//		driver.get("http://localhost:" + this.port + "/login");
-//		LoginPage loginPage = new LoginPage(driver);
-//		loginPage.inputLoginCredentials();
-//		Thread.sleep(1000);
-//		loginPage.submit();
-	}
-
-
 	@Test
 	public void getCredsTabTest() throws InterruptedException {
-		HomePage homePage = new HomePage(driver);
+		TestHelper.signup(driver, port);
+		Thread.sleep(1000);
+		TestHelper.login(driver, port);
+		Thread.sleep(1000);
 		Thread.sleep(1000);
 		homePage.goToCredsTab();
 		Thread.sleep(1000);
@@ -64,66 +59,23 @@ class CredentialsTests {
 
 	@Test
 	public void addCredentialTest() throws InterruptedException {
-		String testUrl = "www.google.com";
-		String testUser = "user1";
-		String testPassword = "password123";
+		// Testing
+		TestHelper.signup(driver, port);
+		Thread.sleep(1000);
 
-		HomePage homePage = new HomePage(driver);
+		//
+		TestHelper.login(driver, port);
 		Thread.sleep(1000);
 		homePage.goToCredsTab();
 		Thread.sleep(1000);
-		CredentialsTab credsTab = new CredentialsTab(driver);
-		credsTab.addCredential();
+		credentialsTab.addCredential();
 		Thread.sleep(1000);
-		credsTab.inputNewCredential(testUrl, testUser, testPassword);
+		credentialsTab.inputNewCredential(TEST_CREDENTIAL_URL, TEST_CREDENTIAL_USERNAME, TEST_CREDENTIAL_PASSWORD);
 		Thread.sleep(1000);
-		credsTab.submit();
+		credentialsTab.submit();
 		Thread.sleep(1000);
 		homePage.goToCredsTab();
 		Thread.sleep(1000);
-		//Assertions.assertEquals(true, credsTab.checkCredentialUrlAndUserCreated(testUrl, testUser));
-		Thread.sleep(1000);
+
 	}
-
-//	@Test
-//	public void updateNoteTest() throws InterruptedException {
-//		HomePage homePage = new HomePage(driver);
-//		NotesTab notesTab = new NotesTab(driver);
-//		addCredentialTest();
-//		Thread.sleep(1000);
-//		int numNotes = notesTab.getNumNotes();
-//		Assertions.assertTrue(numNotes >= 1);
-//		Thread.sleep(1000);
-//		notesTab.clickEditNote();
-//		Thread.sleep(1000);
-//		notesTab.inputNewNote("Updated Title 1");
-//		Thread.sleep(1000);
-//		notesTab.submit();
-//		Thread.sleep(1000);
-//		homePage.goToNotesTab();
-//		Thread.sleep(1000);
-//		Assertions.assertEquals(numNotes, notesTab.getNumNotes());
-//		Thread.sleep(1000);
-//		Assertions.assertTrue(notesTab.checkNoteCreated("Updated Title 1"));
-//		Thread.sleep(1000);
-//	}
-
-//	@Test
-//	public void deleteNoteTest() throws InterruptedException {
-//		HomePage homePage = new HomePage(driver);
-//		NotesTab notesTab = new NotesTab(driver);
-//		addNoteTest();
-//		Thread.sleep(1000);
-//		homePage.goToNotesTab();
-//		Thread.sleep(1000);
-//		int numNotes = notesTab.getNumNotes();
-//		Assertions.assertTrue(numNotes >= 1);
-//		notesTab.clickDeleteNote();
-//		Thread.sleep(1000);
-//		homePage.goToNotesTab();
-//		Thread.sleep(1000);
-//		Assertions.assertEquals(numNotes - 1, notesTab.getNumNotes());
-//		Thread.sleep(1000);
-//	}
-
 }

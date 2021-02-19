@@ -33,32 +33,7 @@ public class CredentialService {
         return null;
     }
 
-    public int createCredential(Credential cred, String username){
-        Integer userId = userService.getUserId(username);
-
-        if(userId != null){
-            SecureRandom random = new SecureRandom();
-            byte[] key = new byte[16];
-            random.nextBytes(key);
-            String encodedKey = Base64.getEncoder().encodeToString(key);
-            String encryptedPassword = encryptionService.encryptValue(cred.getPassword(), encodedKey);
-
-            cred.setKey(encodedKey);
-            cred.setPassword(encryptedPassword);
-            cred.setUserid(userId);
-
-            return credMapper.addCredential(cred);
-        }
-
-        return -1;
-    }
-
-    public Credential getCredential(int credId){
-
-        return credMapper.getCredential(credId);
-    }
-
-    public Integer updateCredential(Credential credential){
+    private Credential getSecureCredential(Credential credential){
         SecureRandom random = new SecureRandom();
         byte[] key = new byte[16];
         random.nextBytes(key);
@@ -68,11 +43,51 @@ public class CredentialService {
         credential.setKey(encodedKey);
         credential.setPassword(encryptedPassword);
 
+        return credential;
+    }
+
+    public int createCredential(Credential credential, String username){
+        Integer userId = userService.getUserId(username);
+
+        if(userId != null){
+            Credential secureCredential = getSecureCredential(credential);
+            secureCredential.setUserid(userId);
+
+            return credMapper.addCredential(secureCredential);
+        }
+
+        return -1;
+    }
+
+    public Credential getCredential(int credentialId){
+        return credMapper.getCredential(credentialId);
+    }
+
+    public Integer updateCredential(Credential credential){
+        // get old credential from DB
+        Credential old_credential = getCredential(credential.getCredentialid());
+
+        System.out.println("OLD CREDENTIAL: " + old_credential.toString());
+
+        // check if password has changed (so we do not update unchanged passwords)
+        String newPassword = credential.getPassword();
+        String oldEncryptedPassword = old_credential.getPassword();
+        String oldPassword = encryptionService.decryptValue(oldEncryptedPassword, old_credential.getKey());
+
+        // if password has changed, then we generate a new secure encrypted one
+        if(!newPassword.equals(oldPassword)){
+            credential = getSecureCredential(credential);
+        } else {
+            credential.setKey(old_credential.getKey());
+            credential.setPassword(old_credential.getPassword());
+        }
+
+        credential.setUserid(old_credential.getUserid());
+        System.out.println("NEW CREDENTIAL: " + credential.toString());
         return credMapper.updateCredential(credential);
     }
 
     public Integer deleteCredential(Integer credId){
         return credMapper.deleteCredential(credId);
     }
-
 }
