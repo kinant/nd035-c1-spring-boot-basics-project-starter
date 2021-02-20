@@ -24,4 +24,8 @@ public class TestHelper {
         signupPage.inputNewUser(FIRST_NAME, LAST_NAME, USERNAME, PASSWORD);
         signupPage.submitSignup();
     }
+
+    public static void goHome(WebDriver driver, int port){
+        driver.get("http://localhost:" + port + "/home");
+    }
 }

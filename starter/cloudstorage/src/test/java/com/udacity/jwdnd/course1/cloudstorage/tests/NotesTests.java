@@ -88,6 +88,10 @@ class NotesTests {
 		addNewNote();
 		Thread.sleep(1000);
 
+		// go back to home page
+		TestHelper.goHome(driver, port);
+		Thread.sleep(1000);
+
 		// go back to the notes tab
 		homePage.goToNotesTab();
 		Thread.sleep(1000);
@@ -122,6 +126,10 @@ class NotesTests {
 		notesTab.submit();
 		Thread.sleep(1000);
 
+		// go back to home page
+		TestHelper.goHome(driver, port);
+		Thread.sleep(1000);
+
 		// go back to notes tab
 		homePage.goToNotesTab();
 		Thread.sleep(1000);
@@ -147,6 +155,10 @@ class NotesTests {
 
 		// delete the note
 		notesTab.clickDeleteNote();
+		Thread.sleep(1000);
+
+		// go back to home page
+		TestHelper.goHome(driver, port);
 		Thread.sleep(1000);
 
 		// go back to the notes tab
