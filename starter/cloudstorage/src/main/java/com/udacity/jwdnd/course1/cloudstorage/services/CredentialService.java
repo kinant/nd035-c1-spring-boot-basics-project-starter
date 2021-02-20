@@ -28,7 +28,7 @@ public class CredentialService {
         this.credMapper = credMapper;
     }
 
-    public List<Credential> getCredentials(String username){
+    public List<Credential> getCredentials(){
         Integer userId = authenticationFacade.getAuthenticatedUserId();
 
         if(userId != null){
@@ -51,7 +51,7 @@ public class CredentialService {
         return credential;
     }
 
-    public int createCredential(Credential credential, String username){
+    public int createCredential(Credential credential){
         Integer userId = authenticationFacade.getAuthenticatedUserId();
 
         if(userId != null){
