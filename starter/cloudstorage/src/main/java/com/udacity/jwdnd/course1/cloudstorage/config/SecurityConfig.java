@@ -31,7 +31,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.headers().frameOptions().sameOrigin();
         //http.headers().frameOptions().disable();
 
-
         http.authorizeRequests()
                 .antMatchers("/signup", "/css/**", "/h2-console/**", "/js/**").permitAll()
                 .anyRequest().authenticated();
@@ -43,5 +42,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // TODO: change default success url once defined
         http.formLogin()
                 .defaultSuccessUrl("/home", true);
+
+        http.logout()
+                .logoutUrl("/logout");
     }
 }
