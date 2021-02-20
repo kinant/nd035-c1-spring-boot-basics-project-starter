@@ -2,21 +2,17 @@ package com.udacity.jwdnd.course1.cloudstorage.controller;
 
 import com.udacity.jwdnd.course1.cloudstorage.model.File;
 import com.udacity.jwdnd.course1.cloudstorage.services.FileService;
-import com.udacity.jwdnd.course1.cloudstorage.storage.StorageFileNotFoundException;
-import org.apache.ibatis.annotations.Delete;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.swing.text.Document;
-import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -33,43 +29,36 @@ public class FileController {
     }
 
     @GetMapping()
-    public String listUplodadedFiles(Model model, Authentication authentication){
-        System.out.println("ATTEMPTING TO GET LIST OF USER FIES: ");
+    public String listUplodadedFiles(Model model){
 
-        List<File> allFiles = fileService.getFilesByUser(authentication.getName());
+        List<File> allFiles = fileService.getFilesByUser();
 
         for (File file:
              allFiles) {
             System.out.println(file.toString());
         }
 
-        model.addAttribute("files", fileService.getFilesByUser(authentication.getName()));
-
-
-
+        model.addAttribute("files", fileService.getFilesByUser());
         return "_files";
     }
 
     @PostMapping()
-    public String handleFileUpload(@RequestParam("file") MultipartFile file,
-                                   RedirectAttributes redirectAttributes, Authentication authentication) {
-
-        System.out.println("ATTEMPTING TO UPLOAD FILE: ");
-        System.out.println("File name (original): " + file.getOriginalFilename());
-        System.out.println("File name: " + file.getName());
-        System.out.println("File size: " + file.getSize());
-        System.out.println("Content type " + file.getContentType());
-
-        // storageService.store(file);
-        // redirectAttributes.addFlashAttribute("message",
-        //        "You successfully uploaded " + file.getOriginalFilename() + "!");
-        //
+    public String handleFileUpload(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
         try {
-            this.fileService.addFile(file, authentication.getName());
-        } catch (IOException e){
-            e.printStackTrace();
+            int result = this.fileService.addFile(file);
+
+            if(result == 1) {
+                redirectAttributes.addFlashAttribute("successMessage", "File was uploaded!");
+            } else if(result == 999) {
+                redirectAttributes.addFlashAttribute("errorMessage", "File could not be uploaded. A file with that name already exists!");
+            } else {
+                redirectAttributes.addFlashAttribute("errorMessage", "File was not uploaded. Please try again!");
+            }
+            return "redirect:/result";
+        } catch(Exception e){
+            redirectAttributes.addFlashAttribute("errorMessage", "There was an error uploading the file. Please try again!");
+            return "redirect:/result";
         }
-        return "home";
     }
 
 
@@ -83,23 +72,23 @@ public class FileController {
                 .contentType(MediaType.parseMediaType(file.getContenttype()))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
                 .body(file.getFiledata());
-
-        // Document document = documentDao.findByDocName(fileName);
-
-        //return ResponseEntity.ok()
-        //    .contentType(MediaType.parseMediaType(contentType))
-        //    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"")
-        //    .body(document.getFile());
     }
 
     @GetMapping("/delete")
-    public String deleteFile(@RequestParam Integer fileid){
-        this.fileService.deleteFile(fileid);
-        return "home";
-    }
+    public String deleteFile(@RequestParam Integer fileid, RedirectAttributes redirectAttributes){
 
-    @ExceptionHandler(StorageFileNotFoundException.class)
-    public ResponseEntity<?> handleStorageFileNotFound(StorageFileNotFoundException exc) {
-        return ResponseEntity.notFound().build();
+        try {
+            int result = this.fileService.deleteFile(fileid);
+
+            if(result == 1) {
+                redirectAttributes.addFlashAttribute("successMessage", "File was was deleted!");
+            } else {
+                redirectAttributes.addFlashAttribute("errorMessage", "File was not deleted. Please try again!");
+            }
+            return "redirect:/result";
+        } catch(Exception e){
+            redirectAttributes.addFlashAttribute("errorMessage", "There was an error deleting the file. Please try again!");
+            return "redirect:/result";
+        }
     }
 }

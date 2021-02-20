@@ -18,9 +18,6 @@ public class NotesController {
     private final NoteService noteService;
     private final UserService userService;
 
-    @Autowired
-    private IAuthenticationFacade authenticationFacade;
-
     public NotesController(NoteService noteService, UserService userService) {
         this.noteService = noteService;
         this.userService = userService;

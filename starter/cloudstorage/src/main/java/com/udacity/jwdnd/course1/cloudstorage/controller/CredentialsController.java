@@ -86,13 +86,13 @@ public class CredentialsController {
             int result = credentialService.deleteCredential(credid);
 
             if(result == 1){
-                redirectAttributes.addFlashAttribute("successMessage", "Note was deleted!");
+                redirectAttributes.addFlashAttribute("successMessage", "Credential was deleted!");
             } else {
-                redirectAttributes.addFlashAttribute("errorMessage", "Note was not deleted. Please try again!");
+                redirectAttributes.addFlashAttribute("errorMessage", "Credential was not deleted. Please try again!");
             }
             return "redirect:/result";
         } catch (Exception e){
-            redirectAttributes.addFlashAttribute("errorMessage", "There was an error deleting the note. Please try again!");
+            redirectAttributes.addFlashAttribute("errorMessage", "There was an error deleting the credential. Please try again!");
             return "redirect:/result";
         }
     }

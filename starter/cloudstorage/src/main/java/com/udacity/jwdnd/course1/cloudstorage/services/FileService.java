@@ -24,12 +24,17 @@ public class FileService {
         this.userService = userService;
     }
 
-    public List<File> getFilesByUser(String username){
+    public List<File> getFilesByUser(){
         Integer userid = authenticationFacade.getAuthenticatedUserId();
         return fileMapper.getFilesByUserId(userid);
     }
 
-    public Integer addFile(MultipartFile file, String username) throws IOException {
+    public boolean checkFileExists(String filename){
+        Integer userid = authenticationFacade.getAuthenticatedUserId();
+        return fileMapper.getFileName(userid, filename) != null;
+    }
+
+    public int addFile(MultipartFile file) throws IOException {
         Integer userid = authenticationFacade.getAuthenticatedUserId();
         File f = new File (
                 null,
@@ -39,10 +44,15 @@ public class FileService {
                 userid,
                 file.getBytes()
         );
+
+        if(checkFileExists(file.getOriginalFilename())){
+            return 999;
+        }
+
         return fileMapper.addFile(f);
     }
 
-    public Integer deleteFile(Integer fileId){
+    public int deleteFile(Integer fileId){
         return fileMapper.deleteFile(fileId);
     }
 
