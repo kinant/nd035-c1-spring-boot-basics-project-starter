@@ -97,6 +97,10 @@ class CredentialsTests {
 		addNewCredential();
 		Thread.sleep(1000);
 
+		// go back to home page
+		TestHelper.goHome(driver, port);
+		Thread.sleep(1000);
+
 		// go back to credentials tab
 		homePage.goToCredsTab();
 		Thread.sleep(1000);
@@ -165,6 +169,10 @@ class CredentialsTests {
 		credentialsTab.submit();
 		Thread.sleep(1000);
 
+		// go back to home page
+		TestHelper.goHome(driver, port);
+		Thread.sleep(1000);
+
 		// go back to credentials tab
 		homePage.goToCredsTab();
 		Thread.sleep(1000);
@@ -213,6 +221,10 @@ class CredentialsTests {
 
 		// click the delete button
 		credentialsTab.clickDeleteCredential();
+		Thread.sleep(1000);
+
+		// go back to home page
+		TestHelper.goHome(driver, port);
 		Thread.sleep(1000);
 
 		// go back to credentials tab
