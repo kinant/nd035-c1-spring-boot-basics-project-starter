@@ -56,12 +56,19 @@ class NotesTests {
 	@Test
 	@Order(1)
 	public void getNotesTabTest() throws InterruptedException {
+		// signup
 		TestHelper.signup(driver, port);
 		Thread.sleep(1000);
+
+		// log in
 		TestHelper.login(driver, port);
 		Thread.sleep(1000);
+
+		// go to the notes tab
 		homePage.goToNotesTab();
 		Thread.sleep(1000);
+
+		// check that the add new note button exists (for checking the correct tab pane)
 		String addNoteBtnText = driver.findElement(By.id("add-note-btn")).getText();
 		Assertions.assertEquals("+ Add a New Note", addNoteBtnText);
 	}
@@ -69,14 +76,23 @@ class NotesTests {
 	@Test
 	@Order(2)
 	public void addNoteTest() throws InterruptedException {
+		// log in
 		TestHelper.login(driver, port);
 		Thread.sleep(1000);
+
+		// go to the notes tab
 		homePage.goToNotesTab();
 		Thread.sleep(1000);
+
+		// add a new note
 		addNewNote();
 		Thread.sleep(1000);
+
+		// go back to the notes tab
 		homePage.goToNotesTab();
 		Thread.sleep(1000);
+
+		// check that the note was added to the list
 		Assertions.assertEquals(true, notesTab.checkNoteExists(TEST_TITLE, TEST_DESCRIPTION));
 		Thread.sleep(1000);
 	}
@@ -84,44 +100,60 @@ class NotesTests {
 	@Test
 	@Order(3)
 	public void updateNoteTest() throws InterruptedException {
+		// log in
 		TestHelper.login(driver, port);
 		Thread.sleep(1000);
+
+		// go to the notes tab
 		homePage.goToNotesTab();
 		Thread.sleep(1000);
-		int numNotes = notesTab.getNumNotes();
-		Assertions.assertTrue(numNotes >= 1);
+
+		// check that a note exists
+		Assertions.assertTrue(notesTab.getNumNotes() == 1);
 		Thread.sleep(1000);
+
+		// click the edit note button
 		notesTab.clickEditNote();
 		Thread.sleep(1000);
+
+		// input updated note details
 		notesTab.inputNewNote(TEST_UPDATED_TITLE, TEST_UPDATED_DESCRIPTION);
 		Thread.sleep(1000);
 		notesTab.submit();
 		Thread.sleep(1000);
+
+		// go back to notes tab
 		homePage.goToNotesTab();
 		Thread.sleep(1000);
-		// check num notes remains the same
-		Assertions.assertEquals(numNotes, notesTab.getNumNotes());
-		// check old note doesnt exist
-		Assertions.assertFalse(notesTab.checkNoteExists(TEST_TITLE, TEST_DESCRIPTION));
+		// check no new note was added
+		Assertions.assertTrue(notesTab.getNumNotes() == 1);
 		// check note was updated
 		Assertions.assertTrue(notesTab.checkNoteExists(TEST_UPDATED_TITLE, TEST_UPDATED_DESCRIPTION));
-		Thread.sleep(1000);
 	}
 
 	@Test
 	@Order(4)
 	public void deleteNoteTest() throws InterruptedException {
+		// log in
 		TestHelper.login(driver, port);
 		Thread.sleep(1000);
+
+		// go to the notes tab
 		homePage.goToNotesTab();
 		Thread.sleep(1000);
-		int numNotes = notesTab.getNumNotes();
-		Assertions.assertTrue(numNotes >= 1);
+
+		// make sure a note exists
+		Assertions.assertTrue(notesTab.getNumNotes() == 1);
+
+		// delete the note
 		notesTab.clickDeleteNote();
 		Thread.sleep(1000);
+
+		// go back to the notes tab
 		homePage.goToNotesTab();
 		Thread.sleep(1000);
-		Assertions.assertEquals(numNotes - 1, notesTab.getNumNotes());
-		Thread.sleep(1000);
+
+		// check that no notes exist
+		Assertions.assertTrue(notesTab.getNumNotes() == 0);
 	}
 }

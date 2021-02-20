@@ -65,13 +65,19 @@ class CredentialsTests {
 	@Test
 	@Order(1)
 	public void getCredentialTabTest() throws InterruptedException {
+		// sign up
 		TestHelper.signup(driver, port);
 		Thread.sleep(1000);
+
+		// log in
 		TestHelper.login(driver, port);
 		Thread.sleep(1000);
-		Thread.sleep(1000);
+
+		// go to the credentials tab
 		homePage.goToCredsTab();
 		Thread.sleep(1000);
+
+		// check that the add new credentials button exists (to test for correct tab)
 		String addNoteBtnText = driver.findElement(By.id("add-creds-btn")).getText();
 		Assertions.assertEquals("+ Add a New Credential", addNoteBtnText);
 	}
@@ -79,28 +85,49 @@ class CredentialsTests {
 	@Test
 	@Order(2)
 	public void addCredentialTest() throws InterruptedException {
+		// log in
 		TestHelper.login(driver, port);
 		Thread.sleep(1000);
+
+		// go to the credentials tab
 		homePage.goToCredsTab();
 		Thread.sleep(1000);
+
+		// add a new credential
 		addNewCredential();
 		Thread.sleep(1000);
+
+		// go back to credentials tab
 		homePage.goToCredsTab();
 		Thread.sleep(1000);
-		// int userId = authenticationFacade.getAuthenticatedUserId();
-		Assertions.assertTrue(credentialsTab.checkSecureCredentialExists(TEST_CREDENTIAL_URL, TEST_CREDENTIAL_USERNAME, TEST_CREDENTIAL_PASSWORD, credentialService));
-		Thread.sleep(1000);
+
+		// check that the secure encrypted credential shows up in the list
+		Assertions.assertTrue(
+				credentialsTab.checkSecureCredentialExists(
+						TEST_CREDENTIAL_URL,
+						TEST_CREDENTIAL_USERNAME,
+						TEST_CREDENTIAL_PASSWORD,
+						credentialService
+				)
+		);
 	}
 
 	@Test
 	@Order(3)
 	public void viewDecryptedCredentialTest() throws InterruptedException {
+		// log in
 		TestHelper.login(driver, port);
 		Thread.sleep(1000);
+
+		// go to the credentials tab
 		homePage.goToCredsTab();
 		Thread.sleep(1000);
+
+		// click the edit button to open up the modal view of credentials
 		credentialsTab.clickEditCredential();
 		Thread.sleep(1000);
+
+		// check that the decrypted password is shown (should be the password used to create)
 		Assertions.assertTrue(
 				credentialsTab.checkDecryptedCredentialsExist(
 						TEST_CREDENTIAL_URL,
@@ -108,18 +135,27 @@ class CredentialsTests {
 						TEST_CREDENTIAL_PASSWORD
 				)
 		);
-		Thread.sleep(1000);
 	}
 
 	@Test
 	@Order(4)
 	public void updateCredentialsTest() throws InterruptedException {
+		// log in
 		TestHelper.login(driver, port);
 		Thread.sleep(1000);
+
+		// go to credentials tab
 		homePage.goToCredsTab();
 		Thread.sleep(1000);
+
+		// check that a credential exists
+		Assertions.assertTrue(credentialsTab.getNumCredentials() == 1);
+
+		// click on edit credentials
 		credentialsTab.clickEditCredential();
 		Thread.sleep(1000);
+
+		// input updated credentials
 		credentialsTab.inputNewCredential(
 				TEST_UPDATED_CREDENTIAL_URL,
 				TEST_UPDATED_CREDENTIAL_USERNAME,
@@ -129,8 +165,14 @@ class CredentialsTests {
 		credentialsTab.submit();
 		Thread.sleep(1000);
 
+		// go back to credentials tab
 		homePage.goToCredsTab();
 		Thread.sleep(1000);
+
+		// check no new credential was added
+		Assertions.assertTrue(credentialsTab.getNumCredentials() == 1);
+
+		// check that the secure (encrypted) credentials are shown in list
 		Assertions.assertTrue(
 				credentialsTab.checkSecureCredentialExists(
 						TEST_UPDATED_CREDENTIAL_URL,
@@ -140,8 +182,12 @@ class CredentialsTests {
 				)
 		);
 		Thread.sleep(1000);
+
+		// click on edit credentials to open up the modal view
 		credentialsTab.clickEditCredential();
 		Thread.sleep(1000);
+
+		// check that the decrypted updated credentials are shown
 		Assertions.assertTrue(
 				credentialsTab.checkDecryptedCredentialsExist(
 						TEST_UPDATED_CREDENTIAL_URL,
@@ -149,22 +195,31 @@ class CredentialsTests {
 						TEST_UPDATED_CREDENTIAL_PASSWORD
 				)
 		);
-		Thread.sleep(1000);
 	}
 
 	@Test
 	@Order(5)
 	public void deleteCredentialTest() throws InterruptedException {
+		// login
 		TestHelper.login(driver, port);
 		Thread.sleep(1000);
+
+		// go to credentials tab
 		homePage.goToCredsTab();
 		Thread.sleep(1000);
+		// make sure we have one credential in the list
 		Assertions.assertTrue(credentialsTab.getNumCredentials() == 1);
 		Thread.sleep(1000);
+
+		// click the delete button
 		credentialsTab.clickDeleteCredential();
 		Thread.sleep(1000);
+
+		// go back to credentials tab
 		homePage.goToCredsTab();
 		Thread.sleep(1000);
+
+		// check that we no longer have credentials
 		Assertions.assertTrue(credentialsTab.getNumCredentials() == 0);
 	}
 }
