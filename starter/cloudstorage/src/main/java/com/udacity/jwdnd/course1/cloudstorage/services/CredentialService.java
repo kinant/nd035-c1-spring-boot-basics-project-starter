@@ -2,9 +2,7 @@ package com.udacity.jwdnd.course1.cloudstorage.services;
 
 import com.udacity.jwdnd.course1.cloudstorage.auth.IAuthenticationFacade;
 import com.udacity.jwdnd.course1.cloudstorage.mapper.CredentialMapper;
-import com.udacity.jwdnd.course1.cloudstorage.mapper.NoteMapper;
 import com.udacity.jwdnd.course1.cloudstorage.model.Credential;
-import com.udacity.jwdnd.course1.cloudstorage.model.Note;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,15 +13,13 @@ import java.util.List;
 @Service
 public class CredentialService {
 
-    private final UserService userService;
     private final EncryptionService encryptionService;
     private final CredentialMapper credMapper;
 
     @Autowired
     private IAuthenticationFacade authenticationFacade;
 
-    public CredentialService(UserService userService, EncryptionService encryptionService, CredentialMapper credMapper) {
-        this.userService = userService;
+    public CredentialService(EncryptionService encryptionService, CredentialMapper credMapper) {
         this.encryptionService = encryptionService;
         this.credMapper = credMapper;
     }
@@ -88,17 +84,11 @@ public class CredentialService {
         }
 
         credential.setUserid(old_credential.getUserid());
-        System.out.println("NEW CREDENTIAL: " + credential.toString());
         return credMapper.updateCredential(credential);
     }
 
     public Credential getCredentialByURLAndUserName(String url, String username){
-        System.out.println("======== GETTING CREDENTIAL BY URL AND USERNAME ==============");
-        System.out.println("url: " + url);
-        System.out.println("username: " + username);
-
         Credential c = credMapper.getCredentialByURLAndUsername(url, username);
-        System.out.println("Credential: " + c.toString());
         return c;
     }
 

@@ -39,7 +39,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/login")
                 .permitAll();
 
-        // TODO: change default success url once defined
         http.formLogin()
                 .defaultSuccessUrl("/home", true);
 

@@ -1,7 +1,5 @@
 package com.udacity.jwdnd.course1.cloudstorage.pageobjects;
 
-import com.udacity.jwdnd.course1.cloudstorage.services.CredentialService;
-
 public class CredentialRow {
     private String url;
     private String username;

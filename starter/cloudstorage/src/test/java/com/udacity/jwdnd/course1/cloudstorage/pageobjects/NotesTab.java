@@ -11,16 +11,16 @@ import java.util.List;
 
 public class NotesTab {
     @FindBy(id = "add-note-btn")
-    WebElement addNoteBtn;
+    private WebElement addNoteBtn;
 
     @FindBy(id = "note-title")
-    WebElement titleInput;
+    private WebElement titleInput;
 
     @FindBy(id = "note-description")
-    WebElement descriptionInput;
+    private WebElement descriptionInput;
 
     @FindBy(id = "userTable")
-    WebElement notesTable;
+    private WebElement notesTable;
 
     public NotesTab(WebDriver driver) {
         PageFactory.initElements(driver, this);
@@ -81,8 +81,7 @@ public class NotesTab {
         List<WebElement> buttons = notesTable.findElements(By.tagName("button"));
 
         for(WebElement button: buttons){
-            System.out.println("Note element tag: " + button.getTagName());
-            System.out.println("Note element inner html: " + button.getAttribute("innerHTML"));
+
             if(button.getTagName().equals("button") && button.getAttribute("innerHTML").equals("Edit")){
                 button.click();
                 break;
@@ -95,8 +94,7 @@ public class NotesTab {
         List<WebElement> notes = notesTable.findElements(By.tagName("a"));
 
         for(WebElement note: notes){
-            System.out.println("Note element tag: " + note.getTagName());
-            System.out.println("Note element inner html: " + note.getAttribute("innerHTML"));
+
             if(note.getTagName().equals("a") && note.getAttribute("innerHTML").equals("Delete")){
                 note.click();
                 break;

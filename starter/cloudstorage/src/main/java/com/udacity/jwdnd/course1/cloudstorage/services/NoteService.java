@@ -1,6 +1,5 @@
 package com.udacity.jwdnd.course1.cloudstorage.services;
 
-import com.udacity.jwdnd.course1.cloudstorage.auth.AuthenticationFacade;
 import com.udacity.jwdnd.course1.cloudstorage.auth.IAuthenticationFacade;
 import com.udacity.jwdnd.course1.cloudstorage.mapper.NoteMapper;
 import com.udacity.jwdnd.course1.cloudstorage.model.Note;
@@ -12,14 +11,12 @@ import java.util.List;
 @Service
 public class NoteService {
 
-    private final UserService userService;
     private final NoteMapper noteMapper;
 
     @Autowired
     private IAuthenticationFacade authenticationFacade;
 
-    public NoteService(UserService userService, NoteMapper noteMapper) {
-        this.userService = userService;
+    public NoteService(NoteMapper noteMapper) {
         this.noteMapper = noteMapper;
     }
 

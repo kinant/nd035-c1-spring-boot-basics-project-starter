@@ -14,22 +14,19 @@ import java.util.List;
 
 public class CredentialsTab {
     @FindBy(id = "add-creds-btn")
-    WebElement addCredBtn;
+    private WebElement addCredBtn;
 
     @FindBy(id = "credential-url")
-    WebElement urlInput;
+    private WebElement urlInput;
 
     @FindBy(id = "credential-username")
-    WebElement usernameInput;
+    private WebElement usernameInput;
 
     @FindBy(id = "credential-password")
-    WebElement passwordInput;
+    private WebElement passwordInput;
 
     @FindBy(id = "credentialTable")
-    WebElement credentialTable;
-
-    @FindBy(tagName = "form")
-    WebElement credentialForm;
+    private WebElement credentialTable;
 
     public CredentialsTab(WebDriver driver) {
         PageFactory.initElements(driver, this);
@@ -66,16 +63,9 @@ public class CredentialsTab {
             String username = userElement.getAttribute("innerHTML");
             String password = passElement.getAttribute("innerHTML");
 
-            System.out.println("=========== PRINTING NOTE =============");
-            System.out.println("URL: " + url);
-            System.out.println("USERNAME: " + username);
-            System.out.println("PASSWORD: " + password);
-
             CredentialRow cRow = new CredentialRow(url, username, password);
             credentialRows.add(cRow);
         }
-
-        System.out.println("GETTING CREDENTIALS ROWS COMPLETE - (size) = " + credentialRows.size());
 
         return credentialRows;
     }
@@ -102,8 +92,6 @@ public class CredentialsTab {
         List<WebElement> buttons = credentialTable.findElements(By.tagName("button"));
 
         for(WebElement button: buttons){
-            System.out.println("Note element tag: " + button.getTagName());
-            System.out.println("Note element inner html: " + button.getAttribute("innerHTML"));
             if(button.getTagName().equals("button") && button.getAttribute("innerHTML").equals("Edit")){
                 button.click();
                 break;
@@ -130,8 +118,7 @@ public class CredentialsTab {
         List<WebElement> buttons = credentialTable.findElements(By.tagName("a"));
 
         for(WebElement button: buttons){
-            System.out.println("Note element tag: " + button.getTagName());
-            System.out.println("Note element inner html: " + button.getAttribute("innerHTML"));
+
             if(button.getTagName().equals("a") && button.getAttribute("innerHTML").equals("Delete")){
                 button.click();
                 break;

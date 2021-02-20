@@ -14,14 +14,12 @@ import java.util.List;
 public class FileService {
 
     private final FileMapper fileMapper;
-    private final UserService userService;
 
     @Autowired
     private IAuthenticationFacade authenticationFacade;
 
-    public FileService(FileMapper fileMapper, UserService userService){
+    public FileService(FileMapper fileMapper){
         this.fileMapper = fileMapper;
-        this.userService = userService;
     }
 
     public List<File> getFilesByUser(){
