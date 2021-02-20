@@ -44,10 +44,8 @@ public class UserService {
     }
 
     // TODO: FIX: https://www.baeldung.com/get-user-in-spring-security
-    public Integer getCurrentUserId(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentPrincipalName = authentication.getName();
-        return userMapper.getUserId(currentPrincipalName);
+    public Integer getUserId(String username){
+        return userMapper.getUserId(username);
     }
 
     public boolean isUsernameAvailable(String username){

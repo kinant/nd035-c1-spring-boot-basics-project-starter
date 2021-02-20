@@ -1,5 +1,7 @@
 package com.udacity.jwdnd.course1.cloudstorage.tests;
 
+import com.udacity.jwdnd.course1.cloudstorage.auth.IAuthenticationFacade;
+import com.udacity.jwdnd.course1.cloudstorage.model.Credential;
 import com.udacity.jwdnd.course1.cloudstorage.pageobjects.*;
 import com.udacity.jwdnd.course1.cloudstorage.services.CredentialService;
 import io.github.bonigarcia.wdm.WebDriverManager;
@@ -12,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class CredentialsTests {
 
 	@LocalServerPort
@@ -25,7 +28,9 @@ class CredentialsTests {
 	private static final String TEST_CREDENTIAL_USERNAME = "user1";
 	private static final String TEST_CREDENTIAL_PASSWORD = "password123";
 
-	private String test_salt;
+	private static final String TEST_UPDATED_CREDENTIAL_URL = "www.googly.com";
+	private static final String TEST_UPDATED_CREDENTIAL_USERNAME = "user2";
+	private static final String TEST_UPDATED_CREDENTIAL_PASSWORD = "newpassword123";
 
 	@Autowired
 	private CredentialService credentialService;
@@ -49,8 +54,17 @@ class CredentialsTests {
 		}
 	}
 
+	public void addNewCredential() throws InterruptedException {
+		credentialsTab.addCredential();
+		Thread.sleep(1000);
+		credentialsTab.inputNewCredential(TEST_CREDENTIAL_URL, TEST_CREDENTIAL_USERNAME, TEST_CREDENTIAL_PASSWORD);
+		Thread.sleep(1000);
+		credentialsTab.submit();
+	}
+
 	@Test
-	public void getCredsTabTest() throws InterruptedException {
+	@Order(1)
+	public void getCredentialTabTest() throws InterruptedException {
 		TestHelper.signup(driver, port);
 		Thread.sleep(1000);
 		TestHelper.login(driver, port);
@@ -63,25 +77,94 @@ class CredentialsTests {
 	}
 
 	@Test
+	@Order(2)
 	public void addCredentialTest() throws InterruptedException {
-		// Testing
-		TestHelper.signup(driver, port);
-		Thread.sleep(1000);
-
-		//
 		TestHelper.login(driver, port);
 		Thread.sleep(1000);
 		homePage.goToCredsTab();
 		Thread.sleep(1000);
-		credentialsTab.addCredential();
-		Thread.sleep(1000);
-		credentialsTab.inputNewCredential(TEST_CREDENTIAL_URL, TEST_CREDENTIAL_USERNAME, TEST_CREDENTIAL_PASSWORD);
-		Thread.sleep(1000);
-		credentialsTab.submit();
+		addNewCredential();
 		Thread.sleep(1000);
 		homePage.goToCredsTab();
 		Thread.sleep(1000);
-		Assertions.assertTrue(credentialsTab.checkSecureCredentialExists(TEST_CREDENTIAL_URL, TEST_CREDENTIAL_USERNAME, TEST_CREDENTIAL_PASSWORD, this.credentialService));
+		// int userId = authenticationFacade.getAuthenticatedUserId();
+		Assertions.assertTrue(credentialsTab.checkSecureCredentialExists(TEST_CREDENTIAL_URL, TEST_CREDENTIAL_USERNAME, TEST_CREDENTIAL_PASSWORD, credentialService));
 		Thread.sleep(1000);
+	}
+
+	@Test
+	@Order(3)
+	public void viewDecryptedCredentialTest() throws InterruptedException {
+		TestHelper.login(driver, port);
+		Thread.sleep(1000);
+		homePage.goToCredsTab();
+		Thread.sleep(1000);
+		credentialsTab.clickEditCredential();
+		Thread.sleep(1000);
+		Assertions.assertTrue(
+				credentialsTab.checkDecryptedCredentialsExist(
+						TEST_CREDENTIAL_URL,
+						TEST_CREDENTIAL_USERNAME,
+						TEST_CREDENTIAL_PASSWORD
+				)
+		);
+		Thread.sleep(1000);
+	}
+
+	@Test
+	@Order(4)
+	public void updateCredentialsTest() throws InterruptedException {
+		TestHelper.login(driver, port);
+		Thread.sleep(1000);
+		homePage.goToCredsTab();
+		Thread.sleep(1000);
+		credentialsTab.clickEditCredential();
+		Thread.sleep(1000);
+		credentialsTab.inputNewCredential(
+				TEST_UPDATED_CREDENTIAL_URL,
+				TEST_UPDATED_CREDENTIAL_USERNAME,
+				TEST_UPDATED_CREDENTIAL_PASSWORD
+		);
+		Thread.sleep(1000);
+		credentialsTab.submit();
+		Thread.sleep(1000);
+
+		homePage.goToCredsTab();
+		Thread.sleep(1000);
+		Assertions.assertTrue(
+				credentialsTab.checkSecureCredentialExists(
+						TEST_UPDATED_CREDENTIAL_URL,
+						TEST_UPDATED_CREDENTIAL_USERNAME,
+						TEST_UPDATED_CREDENTIAL_PASSWORD,
+						credentialService
+				)
+		);
+		Thread.sleep(1000);
+		credentialsTab.clickEditCredential();
+		Thread.sleep(1000);
+		Assertions.assertTrue(
+				credentialsTab.checkDecryptedCredentialsExist(
+						TEST_UPDATED_CREDENTIAL_URL,
+						TEST_UPDATED_CREDENTIAL_USERNAME,
+						TEST_UPDATED_CREDENTIAL_PASSWORD
+				)
+		);
+		Thread.sleep(1000);
+	}
+
+	@Test
+	@Order(5)
+	public void deleteCredentialTest() throws InterruptedException {
+		TestHelper.login(driver, port);
+		Thread.sleep(1000);
+		homePage.goToCredsTab();
+		Thread.sleep(1000);
+		Assertions.assertTrue(credentialsTab.getNumCredentials() == 1);
+		Thread.sleep(1000);
+		credentialsTab.clickDeleteCredential();
+		Thread.sleep(1000);
+		homePage.goToCredsTab();
+		Thread.sleep(1000);
+		Assertions.assertTrue(credentialsTab.getNumCredentials() == 0);
 	}
 }

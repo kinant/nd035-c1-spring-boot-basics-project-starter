@@ -28,6 +28,9 @@ public class CredentialsTab {
     @FindBy(id = "credentialTable")
     WebElement credentialTable;
 
+    @FindBy(tagName = "form")
+    WebElement credentialForm;
+
     public CredentialsTab(WebDriver driver) {
         PageFactory.initElements(driver, this);
     }
@@ -72,6 +75,8 @@ public class CredentialsTab {
             credentialRows.add(cRow);
         }
 
+        System.out.println("GETTING CREDENTIALS ROWS COMPLETE - (size) = " + credentialRows.size());
+
         return credentialRows;
     }
 
@@ -92,4 +97,50 @@ public class CredentialsTab {
 
         return secureCredentialExists;
     }
+
+    public void clickEditCredential(){
+        List<WebElement> buttons = credentialTable.findElements(By.tagName("button"));
+
+        for(WebElement button: buttons){
+            System.out.println("Note element tag: " + button.getTagName());
+            System.out.println("Note element inner html: " + button.getAttribute("innerHTML"));
+            if(button.getTagName().equals("button") && button.getAttribute("innerHTML").equals("Edit")){
+                button.click();
+                break;
+            }
+        }
+    }
+
+    public boolean checkDecryptedCredentialsExist(String url, String username, String password){
+        boolean decryptedCredentialExists = false;
+
+        // https://knowledge.udacity.com/questions/334094
+        String displayedUrl = urlInput.getAttribute("value");
+        String displayedUsername = usernameInput.getAttribute("value");
+        String displayedPassword = passwordInput.getAttribute("value");
+
+        if(displayedUrl.equals(url) && displayedUsername.equals(username) && displayedPassword.equals(password)){
+            decryptedCredentialExists = true;
+        }
+
+        return decryptedCredentialExists;
+    }
+
+    public void clickDeleteCredential(){
+        List<WebElement> buttons = credentialTable.findElements(By.tagName("a"));
+
+        for(WebElement button: buttons){
+            System.out.println("Note element tag: " + button.getTagName());
+            System.out.println("Note element inner html: " + button.getAttribute("innerHTML"));
+            if(button.getTagName().equals("a") && button.getAttribute("innerHTML").equals("Delete")){
+                button.click();
+                break;
+            }
+        }
+    }
+
+    public int getNumCredentials(){
+        return getCredentialRows().size();
+    }
+
 }

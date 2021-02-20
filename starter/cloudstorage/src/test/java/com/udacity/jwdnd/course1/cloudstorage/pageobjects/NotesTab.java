@@ -78,13 +78,13 @@ public class NotesTab {
 
     public void clickEditNote(){
 
-        List<WebElement> notes = notesTable.findElements(By.tagName("button"));
+        List<WebElement> buttons = notesTable.findElements(By.tagName("button"));
 
-        for(WebElement note: notes){
-            System.out.println("Note element tag: " + note.getTagName());
-            System.out.println("Note element inner html: " + note.getAttribute("innerHTML"));
-            if(note.getTagName().equals("button") && note.getAttribute("innerHTML").equals("Edit")){
-                note.click();
+        for(WebElement button: buttons){
+            System.out.println("Note element tag: " + button.getTagName());
+            System.out.println("Note element inner html: " + button.getAttribute("innerHTML"));
+            if(button.getTagName().equals("button") && button.getAttribute("innerHTML").equals("Edit")){
+                button.click();
                 break;
             }
         }

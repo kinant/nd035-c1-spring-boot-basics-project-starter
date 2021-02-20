@@ -1,8 +1,10 @@
 package com.udacity.jwdnd.course1.cloudstorage.controller;
 
+import com.udacity.jwdnd.course1.cloudstorage.auth.IAuthenticationFacade;
 import com.udacity.jwdnd.course1.cloudstorage.model.Note;
 import com.udacity.jwdnd.course1.cloudstorage.services.NoteService;
 import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,6 +16,9 @@ public class NotesController {
 
     private final NoteService noteService;
     private final UserService userService;
+
+    @Autowired
+    private IAuthenticationFacade authenticationFacade;
 
     public NotesController(NoteService noteService, UserService userService) {
         this.noteService = noteService;
@@ -49,7 +54,7 @@ public class NotesController {
                     note.getNoteid(),
                     note.getNotetitle(),
                     note.getNotedescription(),
-                    userService.getCurrentUserId()
+                    null
             );
             this.noteService.updateNote(n);
         }

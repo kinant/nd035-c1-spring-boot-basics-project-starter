@@ -1,9 +1,11 @@
 package com.udacity.jwdnd.course1.cloudstorage.services;
 
+import com.udacity.jwdnd.course1.cloudstorage.auth.IAuthenticationFacade;
 import com.udacity.jwdnd.course1.cloudstorage.mapper.CredentialMapper;
 import com.udacity.jwdnd.course1.cloudstorage.mapper.NoteMapper;
 import com.udacity.jwdnd.course1.cloudstorage.model.Credential;
 import com.udacity.jwdnd.course1.cloudstorage.model.Note;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
@@ -17,6 +19,9 @@ public class CredentialService {
     private final EncryptionService encryptionService;
     private final CredentialMapper credMapper;
 
+    @Autowired
+    private IAuthenticationFacade authenticationFacade;
+
     public CredentialService(UserService userService, EncryptionService encryptionService, CredentialMapper credMapper) {
         this.userService = userService;
         this.encryptionService = encryptionService;
@@ -24,7 +29,7 @@ public class CredentialService {
     }
 
     public List<Credential> getCredentials(String username){
-        Integer userId = userService.getCurrentUserId();
+        Integer userId = authenticationFacade.getAuthenticatedUserId();
 
         if(userId != null){
             return credMapper.getCredsByUserId(userId);
@@ -47,7 +52,7 @@ public class CredentialService {
     }
 
     public int createCredential(Credential credential, String username){
-        Integer userId = userService.getCurrentUserId();
+        Integer userId = authenticationFacade.getAuthenticatedUserId();
 
         if(userId != null){
             Credential secureCredential = getSecureCredential(credential);
@@ -89,18 +94,12 @@ public class CredentialService {
 
     public Credential getCredentialByURLAndUserName(String url, String username){
         System.out.println("======== GETTING CREDENTIAL BY URL AND USERNAME ==============");
-        Integer userId = userService.getCurrentUserId();
-
-        System.out.println("User id: " + userId);
         System.out.println("url: " + url);
         System.out.println("username: " + username);
 
-        if(userId != null) {
-            Credential c = credMapper.getCredentialByURLAndUsername(userId, url, username);
-            System.out.println("Credential: " + c.toString());
-            return c;
-        }
-        return null;
+        Credential c = credMapper.getCredentialByURLAndUsername(url, username);
+        System.out.println("Credential: " + c.toString());
+        return c;
     }
 
     public Integer deleteCredential(Integer credId){
