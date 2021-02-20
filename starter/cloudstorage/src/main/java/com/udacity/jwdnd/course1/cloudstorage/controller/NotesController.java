@@ -9,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/home/notes")
@@ -26,18 +27,13 @@ public class NotesController {
     }
 
     @GetMapping()
-    public String notesView(@ModelAttribute Note note, Authentication authentication, Model model){
-        String username = authentication.getName();
-        model.addAttribute("notes", noteService.getNotes(username));
-
+    public String notesView(@ModelAttribute Note note, Model model){
+        model.addAttribute("notes", noteService.getNotes());
         return "_notes";
     }
 
     @PostMapping()
-    public String addNote(@ModelAttribute Note note, Authentication authentication, Model model){
-
-        System.out.println("===== (POST) NOTE =========");
-        System.out.println("NOTE ID: " + note.getNoteid());
+    public String addOrUpdateNote(@ModelAttribute Note note, RedirectAttributes redirectAttributes){
 
         if(note.getNoteid() == null) {
             // create new note
@@ -47,7 +43,20 @@ public class NotesController {
                     note.getNotedescription(),
                     null
             );
-            this.noteService.createNote(n, authentication.getName());
+
+            try {
+                int result = noteService.createNote(n);
+
+                if(result == 1) {
+                    redirectAttributes.addFlashAttribute("successMessage", "Note was added!");
+                } else {
+                    redirectAttributes.addFlashAttribute("errorMessage", "Note was not added. Please try again!");
+                }
+                return "redirect:/result";
+            } catch(Exception e){
+                redirectAttributes.addFlashAttribute("errorMessage", "There was an error adding the note. Please try again!");
+                return "redirect:/result";
+            }
         } else {
             // update note
             Note n = new Note(
@@ -56,16 +65,37 @@ public class NotesController {
                     note.getNotedescription(),
                     null
             );
-            this.noteService.updateNote(n);
+
+            try {
+                int result = this.noteService.updateNote(n);
+
+                if(result == 1){
+                    redirectAttributes.addFlashAttribute("successMessage", "Note was updated!");
+                } else {
+                    redirectAttributes.addFlashAttribute("errorMessage", "Note was not updated. Please try again!");
+                }
+                return "redirect:/result";
+            } catch(Exception e){
+                redirectAttributes.addFlashAttribute("errorMessage", "There was an error updating the note. Please try again!");
+                return "redirect:/result";
+            }
         }
-        return "home";
     }
 
     @GetMapping("/delete")
-    public String deleteNote(@RequestParam int noteid){
-        System.out.println("===== (GET) DELETE NOTE =========");
-        System.out.println("Deleting note with id: " + noteid);
-        noteService.deleteNote(noteid);
-        return "home";
+    public String deleteNote(@RequestParam int noteid, RedirectAttributes redirectAttributes){
+        try {
+            int result = noteService.deleteNote(noteid);
+
+            if(result == 1){
+                redirectAttributes.addFlashAttribute("successMessage", "Note was deleted!");
+            } else {
+                redirectAttributes.addFlashAttribute("errorMessage", "Note was not deleted. Please try again!");
+            }
+            return "redirect:/result";
+        } catch (Exception e){
+            redirectAttributes.addFlashAttribute("errorMessage", "There was an error deleting the note. Please try again!");
+            return "redirect:/result";
+        }
     }
 }

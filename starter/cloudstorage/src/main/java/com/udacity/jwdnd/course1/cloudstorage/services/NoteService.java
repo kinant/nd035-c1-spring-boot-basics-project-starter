@@ -23,7 +23,7 @@ public class NoteService {
         this.noteMapper = noteMapper;
     }
 
-    public List<Note> getNotes(String username){
+    public List<Note> getNotes(){
         Integer userId = authenticationFacade.getAuthenticatedUserId();
 
         if(userId != null){
@@ -33,7 +33,7 @@ public class NoteService {
         return null;
     }
 
-    public int createNote(Note note, String username){
+    public int createNote(Note note){
         Integer userId = authenticationFacade.getAuthenticatedUserId();
 
         if(userId != null){
@@ -48,12 +48,12 @@ public class NoteService {
         return noteMapper.getNote(noteId);
     }
 
-    public Integer updateNote(Note note){
+    public int updateNote(Note note){
         note.setUserid(authenticationFacade.getAuthenticatedUserId());
         return noteMapper.updateNote(note);
     }
 
-    public Integer deleteNote(Integer noteId){
+    public int deleteNote(Integer noteId){
         return noteMapper.deleteNote(noteId);
     }
 
