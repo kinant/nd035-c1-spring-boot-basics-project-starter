@@ -8,10 +8,13 @@ import org.openqa.selenium.support.PageFactory;
 public class HomePage {
 
     @FindBy(id = "notes-link")
-    public WebElement notesLink;
+    WebElement notesLink;
 
     @FindBy(id = "creds-link")
-    public WebElement credsLink;
+    WebElement credsLink;
+
+    @FindBy(id = "logout-btn")
+    WebElement logoutBtn;
 
     public HomePage(WebDriver driver) {
         PageFactory.initElements(driver, this);
@@ -23,5 +26,9 @@ public class HomePage {
 
     public void goToCredsTab(){
         credsLink.click();
+    }
+
+    public void logout(){
+        logoutBtn.click();
     }
 }
