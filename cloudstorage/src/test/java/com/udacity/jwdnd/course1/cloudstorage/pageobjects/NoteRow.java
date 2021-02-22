@@ -1,5 +1,9 @@
 package com.udacity.jwdnd.course1.cloudstorage.pageobjects;
 
+/**
+ * Used to represent a row of a note (for testing)
+ * Mapped to HTML elements
+ */
 public class NoteRow {
     private String title;
     private String description;

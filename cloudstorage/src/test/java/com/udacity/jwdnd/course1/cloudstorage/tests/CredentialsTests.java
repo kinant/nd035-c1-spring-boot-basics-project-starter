@@ -1,7 +1,5 @@
 package com.udacity.jwdnd.course1.cloudstorage.tests;
 
-import com.udacity.jwdnd.course1.cloudstorage.auth.IAuthenticationFacade;
-import com.udacity.jwdnd.course1.cloudstorage.model.Credential;
 import com.udacity.jwdnd.course1.cloudstorage.pageobjects.*;
 import com.udacity.jwdnd.course1.cloudstorage.services.CredentialService;
 import io.github.bonigarcia.wdm.WebDriverManager;
@@ -13,6 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 
+/**
+ * Test class for Credential Tests
+ */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class CredentialsTests {
@@ -21,9 +22,12 @@ class CredentialsTests {
 	private int port;
 
 	private WebDriver driver;
+
+	// reference to homepage and credentials tab page
 	private HomePage homePage;
 	private CredentialsTab credentialsTab;
 
+	// test data
 	private static final String TEST_CREDENTIAL_URL = "www.google.com";
 	private static final String TEST_CREDENTIAL_USERNAME = "user1";
 	private static final String TEST_CREDENTIAL_PASSWORD = "password123";
@@ -32,6 +36,7 @@ class CredentialsTests {
 	private static final String TEST_UPDATED_CREDENTIAL_USERNAME = "user2";
 	private static final String TEST_UPDATED_CREDENTIAL_PASSWORD = "newpassword123";
 
+	// reference to credential service
 	@Autowired
 	private CredentialService credentialService;
 
@@ -41,7 +46,8 @@ class CredentialsTests {
 	}
 
 	@BeforeEach
-	public void beforeEach() throws InterruptedException {
+	public void beforeEach() {
+		// inits
 		this.driver = new ChromeDriver();
 		this.homePage = new HomePage(driver);
 		this.credentialsTab = new CredentialsTab(driver);
@@ -54,14 +60,27 @@ class CredentialsTests {
 		}
 	}
 
+	/**
+	 * Inputs and adds a new credential
+	 * @throws InterruptedException
+	 */
 	public void addNewCredential() throws InterruptedException {
+		// click the button
 		credentialsTab.addCredential();
 		Thread.sleep(1000);
+
+		// input data
 		credentialsTab.inputNewCredential(TEST_CREDENTIAL_URL, TEST_CREDENTIAL_USERNAME, TEST_CREDENTIAL_PASSWORD);
 		Thread.sleep(1000);
+
+		//submit form
 		credentialsTab.submit();
 	}
 
+	/**
+	 * Tests access to credentials tab page
+	 * @throws InterruptedException
+	 */
 	@Test
 	@Order(1)
 	public void getCredentialTabTest() throws InterruptedException {
@@ -82,6 +101,11 @@ class CredentialsTests {
 		Assertions.assertEquals("+ Add a New Credential", addNoteBtnText);
 	}
 
+	/**
+	 * Tests the addition of a credential
+	 * and that it's encrypted password is shown after being added
+	 * @throws InterruptedException
+	 */
 	@Test
 	@Order(2)
 	public void addCredentialTest() throws InterruptedException {
@@ -116,6 +140,10 @@ class CredentialsTests {
 		);
 	}
 
+	/**
+	 * Tests that a decrypted credential is shown in the modal view
+	 * @throws InterruptedException
+	 */
 	@Test
 	@Order(3)
 	public void viewDecryptedCredentialTest() throws InterruptedException {
@@ -141,6 +169,10 @@ class CredentialsTests {
 		);
 	}
 
+	/**
+	 * Tests that a credential is updated
+	 * @throws InterruptedException
+	 */
 	@Test
 	@Order(4)
 	public void updateCredentialsTest() throws InterruptedException {
@@ -205,6 +237,10 @@ class CredentialsTests {
 		);
 	}
 
+	/**
+	 * Tests that a credential is deleted
+	 * @throws InterruptedException
+	 */
 	@Test
 	@Order(5)
 	public void deleteCredentialTest() throws InterruptedException {

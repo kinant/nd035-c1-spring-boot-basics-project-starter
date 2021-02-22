@@ -10,6 +10,9 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 
+/**
+ * Test class for User Access/Authentication Tests
+ */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class AccessTests {
@@ -18,40 +21,51 @@ class AccessTests {
 	private int port;
 
 	private WebDriver driver;
+	private LoginPage loginPage;
 
 	@BeforeAll
 	static void beforeAll() {
+		// set up the driver
 		WebDriverManager.chromedriver().setup();
 	}
 
 	@BeforeEach
 	public void beforeEach() {
+		// inits
 		this.driver = new ChromeDriver();
+		this.loginPage = new LoginPage(driver);
 	}
 
 	@AfterEach
 	public void afterEach() {
 		if (this.driver != null) {
+			// quit
 			driver.quit();
 		}
 	}
 
-
+	// navigates to the login page
 	public void getLoginPage() {
 		// get the login page
 		driver.get("http://localhost:" + this.port + "/login");
 	}
 
+	// navigates to the signup page
 	public void getSignupPage() {
 		// get the signup page
 		driver.get("http://localhost:" + this.port + "/signup");
 	}
 
+	// navigates to the home page
 	public void getHomePage(){
 		// get the home page
 		driver.get("http://localhost:" + this.port + "/home");
 	}
 
+	/**
+	 * Tests that we can get to the login page
+	 * @throws InterruptedException
+	 */
 	@Test
 	@Order(1)
 	public void getLoginPageTest() throws InterruptedException {
@@ -62,6 +76,10 @@ class AccessTests {
 		Assertions.assertEquals("Login", driver.getTitle());
 	}
 
+	/**
+	 * Tests that we can get to the signup page
+	 * @throws InterruptedException
+	 */
 	@Test
 	@Order(2)
 	public void getSingupPageTest() throws InterruptedException {
@@ -72,6 +90,11 @@ class AccessTests {
 		Assertions.assertEquals("Sign Up", driver.getTitle());
 	}
 
+	/**
+	 * Tests that user cannot access pages when unauthorized and checks
+	 * that they can access the login and signup pages
+	 * @throws InterruptedException
+	 */
 	@Test
 	@Order(3)
 	public void unauthorizedAccessPagesTest() throws InterruptedException {
@@ -90,6 +113,10 @@ class AccessTests {
 		Assertions.assertEquals("Login", driver.getTitle());
 	}
 
+	/**
+	 * Tests user signup
+	 * @throws InterruptedException
+	 */
 	@Test
 	@Order(4)
 	public void signupTest() throws InterruptedException {
@@ -97,14 +124,15 @@ class AccessTests {
 		TestHelper.signup(driver, port);
 		Thread.sleep(1000);
 
-		// get signup page object
-		SignupPage signupPage = new SignupPage(driver);
-
-		// check that we were able to signup successfully (by checking for success message)
-		Assertions.assertEquals("You successfully signed up! Please continue to the login page.", signupPage.getSuccessMessage());
+		// check that we were able to signup successfully (by checking for success message in login page)
+		Assertions.assertTrue(loginPage.checkSuccessMessage());
 		Thread.sleep(1000);
 	}
 
+	/**
+	 * Tests user login
+	 * @throws InterruptedException
+	 */
 	@Test
 	@Order(5)
 	public void loginTest() throws InterruptedException {
@@ -119,6 +147,10 @@ class AccessTests {
 		Assertions.assertEquals("Home", driver.getTitle());
 	}
 
+	/**
+	 * Tests user logout
+	 * @throws InterruptedException
+	 */
 	@Test
 	@Order(6)
 	public void logoutTest() throws InterruptedException {

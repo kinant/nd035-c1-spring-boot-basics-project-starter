@@ -18,7 +18,7 @@ public class MessageHelper {
     // signup page errors
     public static final String ERROR_SIGNUP_USER_EXISTS = "Username already exists";
     public static final String ERROR_SIGNUP_ERROR = "There was an error signing you up. Please try again.";
-    public static final String SUCCESS_SIGNUP_COMPLETE = "Successfully signed up! Please proceed to log in: ";
+    public static final String SUCCESS_SIGNUP_COMPLETE = "Successfully signed up! Please proceed to log in:";
 
     // credential messages
     public static final String CREDENTIAL_SUCCESS_CREATE = "Credential was created!";

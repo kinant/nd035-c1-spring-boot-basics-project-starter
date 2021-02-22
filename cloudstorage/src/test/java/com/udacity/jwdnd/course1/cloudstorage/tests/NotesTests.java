@@ -21,6 +21,7 @@ class NotesTests {
 	private HomePage homePage;
 	private NotesTab notesTab;
 
+	// test note data
 	private static final String TEST_TITLE = "Title 1";
 	private static final String TEST_DESCRIPTION = "This is description for title 1";
 	private static final String TEST_UPDATED_TITLE = "Updated Title 2";
@@ -33,6 +34,7 @@ class NotesTests {
 
 	@BeforeEach
 	public void beforeEach() {
+		// inits
 		this.driver = new ChromeDriver();
 		this.homePage = new HomePage(driver);
 		this.notesTab = new NotesTab(driver);
@@ -45,14 +47,24 @@ class NotesTests {
 		}
 	}
 
+	// used to input and sumbit a new note
 	public void addNewNote() throws InterruptedException {
+		// click the add note button
 		notesTab.addNote();
 		Thread.sleep(1000);
+
+		// input data
 		notesTab.inputNewNote(TEST_TITLE, TEST_DESCRIPTION);
 		Thread.sleep(1000);
+
+		// submit the form
 		notesTab.submit();
 	}
 
+	/**
+	 * Tests that we can access the Note Tab Page
+	 * @throws InterruptedException
+	 */
 	@Test
 	@Order(1)
 	public void getNotesTabTest() throws InterruptedException {
@@ -73,6 +85,10 @@ class NotesTests {
 		Assertions.assertEquals("+ Add a New Note", addNoteBtnText);
 	}
 
+	/**
+	 * Tests that we can add a note
+	 * @throws InterruptedException
+	 */
 	@Test
 	@Order(2)
 	public void addNoteTest() throws InterruptedException {
@@ -101,6 +117,10 @@ class NotesTests {
 		Thread.sleep(1000);
 	}
 
+	/**
+	 * Tests that we can update a note
+	 * @throws InterruptedException
+	 */
 	@Test
 	@Order(3)
 	public void updateNoteTest() throws InterruptedException {
@@ -139,6 +159,10 @@ class NotesTests {
 		Assertions.assertTrue(notesTab.checkNoteExists(TEST_UPDATED_TITLE, TEST_UPDATED_DESCRIPTION));
 	}
 
+	/**
+	 * Tests that we can delete a note
+	 * @throws InterruptedException
+	 */
 	@Test
 	@Order(4)
 	public void deleteNoteTest() throws InterruptedException {

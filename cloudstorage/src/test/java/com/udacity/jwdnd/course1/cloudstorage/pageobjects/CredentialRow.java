@@ -1,5 +1,9 @@
 package com.udacity.jwdnd.course1.cloudstorage.pageobjects;
 
+/**
+ * Used to represent a row of a credential (for testing)
+ * Mapped to HTML elements
+ */
 public class CredentialRow {
     private String url;
     private String username;
