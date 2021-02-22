@@ -1,5 +1,6 @@
 package com.udacity.jwdnd.course1.cloudstorage.controller;
 
+import com.udacity.jwdnd.course1.cloudstorage.helpers.MessageHelper;
 import com.udacity.jwdnd.course1.cloudstorage.model.File;
 import com.udacity.jwdnd.course1.cloudstorage.services.FileService;
 
@@ -48,15 +49,19 @@ public class FileController {
             int result = this.fileService.addFile(file);
 
             if(result == 1) {
-                redirectAttributes.addFlashAttribute("successMessage", "File was uploaded!");
-            } else if(result == 999) {
-                redirectAttributes.addFlashAttribute("errorMessage", "File could not be uploaded. A file with that name already exists!");
+                redirectAttributes.addFlashAttribute(MessageHelper.ATTR_SUCCESS, MessageHelper.FILE_SUCCESS_CREATE);
+            } else if(result == 991) {
+                redirectAttributes.addFlashAttribute(MessageHelper.ATTR_ERROR, MessageHelper.FILE_ERROR_EXISTS);
+            } else if(result == 992) {
+                redirectAttributes.addFlashAttribute(MessageHelper.ATTR_ERROR, MessageHelper.FILE_ERROR_SIZE_TOO_BIG);
+            } else if(result == 993) {
+                redirectAttributes.addFlashAttribute(MessageHelper.ATTR_ERROR, MessageHelper.FILE_ERROR_NO_FILE);
             } else {
-                redirectAttributes.addFlashAttribute("errorMessage", "File was not uploaded. Please try again!");
+                redirectAttributes.addFlashAttribute(MessageHelper.ATTR_ERROR, MessageHelper.FILE_ERROR_CREATE);
             }
             return "redirect:/result";
         } catch(Exception e){
-            redirectAttributes.addFlashAttribute("errorMessage", "There was an error uploading the file. Please try again!");
+            redirectAttributes.addFlashAttribute(MessageHelper.ATTR_ERROR, MessageHelper.FILE_ERROR_UNKNOWN);
             return "redirect:/result";
         }
     }

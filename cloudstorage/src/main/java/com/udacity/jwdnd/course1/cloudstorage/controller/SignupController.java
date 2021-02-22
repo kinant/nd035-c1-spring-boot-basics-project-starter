@@ -32,14 +32,14 @@ public class SignupController {
         String signupErr = null;
 
         if(!userService.isUsernameAvailable(user.getUsername())){
-            signupErr = "Username already exists.";
+            signupErr = MessageHelper.ERROR_SIGNUP_USER_EXISTS;
         }
 
         if(signupErr == null){
             int rowsAdded = userService.createUser(user);
 
             if(rowsAdded < 0){
-                signupErr = "There was an error signing you up. Please try again.";
+                signupErr = MessageHelper.ERROR_SIGNUP_ERROR;
             }
         }
 
@@ -48,7 +48,7 @@ public class SignupController {
             redirectAttributes.addFlashAttribute(MessageHelper.ATTR_SUCCESS, MessageHelper.SUCCESS_SIGNUP_COMPLETE);
             return "redirect:/login";
         } else {
-            model.addAttribute("signupError", signupErr);
+            model.addAttribute(MessageHelper.ATTR_SIGNUP_ERROR, signupErr);
         }
 
         return "signup";

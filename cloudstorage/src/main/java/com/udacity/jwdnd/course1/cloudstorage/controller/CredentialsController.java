@@ -1,5 +1,6 @@
 package com.udacity.jwdnd.course1.cloudstorage.controller;
 
+import com.udacity.jwdnd.course1.cloudstorage.helpers.MessageHelper;
 import com.udacity.jwdnd.course1.cloudstorage.model.Credential;
 import com.udacity.jwdnd.course1.cloudstorage.services.CredentialService;
 
@@ -42,13 +43,13 @@ public class CredentialsController {
                 int result = this.credentialService.createCredential(c);
 
                 if(result == 1){
-                    redirectAttributes.addFlashAttribute("successMessage", "Credential was created!");
+                    redirectAttributes.addFlashAttribute(MessageHelper.ATTR_SUCCESS, MessageHelper.CREDENTIAL_SUCCESS_CREATE);
                 } else {
-                    redirectAttributes.addFlashAttribute("errorMessage", "Credential was not created. Please try again!");
+                    redirectAttributes.addFlashAttribute(MessageHelper.ATTR_ERROR, MessageHelper.CREDENTIAL_ERROR_CREATE);
                 }
                 return "redirect:/result";
             } catch(Exception e){
-                redirectAttributes.addFlashAttribute("errorMessage", "There was an creating the credential. Please try again!");
+                redirectAttributes.addFlashAttribute(MessageHelper.ATTR_ERROR, MessageHelper.CREDENTIAL_ERROR_CREATE_UNKNOWN);
                 return "redirect:/result";
             }
         } else {
@@ -66,13 +67,13 @@ public class CredentialsController {
                 int result = this.credentialService.updateCredential(c);
 
                 if(result == 1){
-                    redirectAttributes.addFlashAttribute("successMessage", "Credential was updated!");
+                    redirectAttributes.addFlashAttribute(MessageHelper.ATTR_SUCCESS, MessageHelper.CREDENTIAL_SUCCESS_UPDATE);
                 } else {
-                    redirectAttributes.addFlashAttribute("errorMessage", "Credential was not updated. Please try again!");
+                    redirectAttributes.addFlashAttribute(MessageHelper.ATTR_ERROR, MessageHelper.CREDENTIAL_ERROR_UPDATE);
                 }
                 return "redirect:/result";
             } catch(Exception e){
-                redirectAttributes.addFlashAttribute("errorMessage", "There was an error updating the credential. Please try again!");
+                redirectAttributes.addFlashAttribute(MessageHelper.ATTR_ERROR, MessageHelper.CREDENTIAL_ERROR_UPDATE_UNKNOWN);
                 return "redirect:/result";
             }
         }
@@ -84,13 +85,13 @@ public class CredentialsController {
             int result = credentialService.deleteCredential(credid);
 
             if(result == 1){
-                redirectAttributes.addFlashAttribute("successMessage", "Credential was deleted!");
+                redirectAttributes.addFlashAttribute(MessageHelper.ATTR_SUCCESS, MessageHelper.CREDENTIAL_SUCCESS_DELETE);
             } else {
-                redirectAttributes.addFlashAttribute("errorMessage", "Credential was not deleted. Please try again!");
+                redirectAttributes.addFlashAttribute(MessageHelper.ATTR_ERROR, MessageHelper.CREDENTIAL_ERROR_DELETE);
             }
             return "redirect:/result";
         } catch (Exception e){
-            redirectAttributes.addFlashAttribute("errorMessage", "There was an error deleting the credential. Please try again!");
+            redirectAttributes.addFlashAttribute(MessageHelper.ATTR_ERROR, MessageHelper.CREDENTIAL_ERROR_DELETE_UNKNOWN);
             return "redirect:/result";
         }
     }

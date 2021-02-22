@@ -1,5 +1,6 @@
 package com.udacity.jwdnd.course1.cloudstorage.controller;
 
+import com.udacity.jwdnd.course1.cloudstorage.helpers.MessageHelper;
 import com.udacity.jwdnd.course1.cloudstorage.model.Note;
 import com.udacity.jwdnd.course1.cloudstorage.services.NoteService;
 import org.springframework.stereotype.Controller;
@@ -39,13 +40,13 @@ public class NotesController {
                 int result = noteService.createNote(n);
 
                 if(result == 1) {
-                    redirectAttributes.addFlashAttribute("successMessage", "Note was added!");
+                    redirectAttributes.addFlashAttribute(MessageHelper.ATTR_SUCCESS, MessageHelper.NOTE_SUCCESS_CREATE);
                 } else {
-                    redirectAttributes.addFlashAttribute("errorMessage", "Note was not added. Please try again!");
+                    redirectAttributes.addFlashAttribute(MessageHelper.ATTR_ERROR, MessageHelper.NOTE_ERROR_CREATE);
                 }
                 return "redirect:/result";
             } catch(Exception e){
-                redirectAttributes.addFlashAttribute("errorMessage", "There was an error adding the note. Please try again!");
+                redirectAttributes.addFlashAttribute(MessageHelper.ATTR_ERROR, MessageHelper.NOTE_ERROR_CREATE_UNKNOWN);
                 return "redirect:/result";
             }
         } else {
@@ -61,13 +62,13 @@ public class NotesController {
                 int result = this.noteService.updateNote(n);
 
                 if(result == 1){
-                    redirectAttributes.addFlashAttribute("successMessage", "Note was updated!");
+                    redirectAttributes.addFlashAttribute(MessageHelper.ATTR_SUCCESS, MessageHelper.NOTE_SUCCESS_UPDATE);
                 } else {
-                    redirectAttributes.addFlashAttribute("errorMessage", "Note was not updated. Please try again!");
+                    redirectAttributes.addFlashAttribute(MessageHelper.ATTR_ERROR, MessageHelper.NOTE_ERROR_UPDATE);
                 }
                 return "redirect:/result";
             } catch(Exception e){
-                redirectAttributes.addFlashAttribute("errorMessage", "There was an error updating the note. Please try again!");
+                redirectAttributes.addFlashAttribute(MessageHelper.ATTR_ERROR, MessageHelper.NOTE_ERROR_UPDATE_UNKNOWN);
                 return "redirect:/result";
             }
         }
@@ -79,13 +80,13 @@ public class NotesController {
             int result = noteService.deleteNote(noteid);
 
             if(result == 1){
-                redirectAttributes.addFlashAttribute("successMessage", "Note was deleted!");
+                redirectAttributes.addFlashAttribute(MessageHelper.ATTR_SUCCESS, MessageHelper.NOTE_SUCCESS_DELETE);
             } else {
-                redirectAttributes.addFlashAttribute("errorMessage", "Note was not deleted. Please try again!");
+                redirectAttributes.addFlashAttribute(MessageHelper.ATTR_ERROR, MessageHelper.NOTE_ERROR_DELETE);
             }
             return "redirect:/result";
         } catch (Exception e){
-            redirectAttributes.addFlashAttribute("errorMessage", "There was an error deleting the note. Please try again!");
+            redirectAttributes.addFlashAttribute(MessageHelper.ATTR_ERROR, MessageHelper.NOTE_ERROR_DELETE_UNKNOWN);
             return "redirect:/result";
         }
     }
