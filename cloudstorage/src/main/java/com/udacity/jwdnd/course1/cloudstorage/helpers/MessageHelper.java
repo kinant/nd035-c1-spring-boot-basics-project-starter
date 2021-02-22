@@ -1,5 +1,8 @@
 package com.udacity.jwdnd.course1.cloudstorage.helpers;
 
+/**
+ * Helper class is just used to provide all messages that are sent to the user
+ */
 public class MessageHelper {
 
     // attribute names
