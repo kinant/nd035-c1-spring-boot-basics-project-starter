@@ -15,6 +15,8 @@ import java.util.List;
 public class FileService {
 
     private final FileMapper fileMapper;
+    public static final int FILE_EXISTS_CODE = 991;
+    public static final int FILE_NONE_SELECTED = 992;
 
     @Autowired
     private IAuthenticationFacade authenticationFacade;
@@ -37,7 +39,7 @@ public class FileService {
         Integer userid = authenticationFacade.getAuthenticatedUserId();
 
         if(file.getSize() == 0){
-            return 992;
+            return FILE_NONE_SELECTED;
         }
 
         File f = new File (
@@ -50,7 +52,7 @@ public class FileService {
         );
 
         if(checkFileExists(file.getOriginalFilename())){
-            return 991;
+            return FILE_EXISTS_CODE;
         }
 
         return fileMapper.addFile(f);

@@ -16,9 +16,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
+/**
+ * Controller class for handling all the requests for Files related stuff
+ */
 @Controller
 @RequestMapping("/home/files")
-// https://github.com/spring-guides/gs-uploading-files
 public class FileController {
 
     // private final StorageService storageService;
@@ -29,47 +31,63 @@ public class FileController {
         this.fileService = fileService;
     }
 
+    /**
+     * Handle the GET requests to the default view (list of uploaded files)
+     * @param model     The model
+     * @return          The Files tab
+     */
     @GetMapping()
     public String listUplodadedFiles(Model model){
 
+        // get a list of all the files by the user
         List<File> allFiles = fileService.getFilesByUser();
 
-        for (File file:
-             allFiles) {
-            System.out.println(file.toString());
-        }
-
+        // adds them to the model
         model.addAttribute("files", fileService.getFilesByUser());
         return "_files";
     }
 
+    /**
+     * Handle the POST Request to upload a file
+     * @param file                  The file to be uploaded
+     * @param redirectAttributes    A specialization of the Model interface that controllers
+     *      *                       can use to select attributes for a redirect scenario
+     * @return                      The results page
+     */
     @PostMapping()
     public String handleFileUpload(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
         try {
+            // add the file to DB and store the result
             int result = this.fileService.addFile(file);
 
             if(result == 1) {
+                // success if result = 1
                 redirectAttributes.addFlashAttribute(MessageHelper.ATTR_SUCCESS, MessageHelper.FILE_SUCCESS_CREATE);
-            } else if(result == 991) {
+            } else if(result == FileService.FILE_EXISTS_CODE) {
+                // handle file exists error
                 redirectAttributes.addFlashAttribute(MessageHelper.ATTR_ERROR, MessageHelper.FILE_ERROR_EXISTS);
-            } else if(result == 992) {
+            } else if(result == FileService.FILE_NONE_SELECTED) {
+                // handle no file selected error
                 redirectAttributes.addFlashAttribute(MessageHelper.ATTR_ERROR, MessageHelper.FILE_ERROR_NO_FILE);
             } else {
+                // handle any other errors
                 redirectAttributes.addFlashAttribute(MessageHelper.ATTR_ERROR, MessageHelper.FILE_ERROR_CREATE);
             }
+            // redirect
             return "redirect:/result";
         } catch(Exception e){
-
-            System.out.println("Exception caught?");
-            System.out.println(e.getClass().toString());
-            e.printStackTrace();
-
+            // handle exceptions
             redirectAttributes.addFlashAttribute(MessageHelper.ATTR_ERROR, MessageHelper.FILE_ERROR_UNKNOWN);
             return "redirect:/result";
         }
     }
 
-    // https://knowledge.udacity.com/questions/271629
+    /**
+     * Handles the download of a file by the user
+     * As seen in: https://knowledge.udacity.com/questions/271629
+     * @param fileid    The ID of the file to be downloaded
+     * @return          ResponseEntity (download the file)
+     */
     @GetMapping("/download")
     public ResponseEntity downloadFile(@RequestParam Integer fileid) {
 
@@ -81,19 +99,31 @@ public class FileController {
                 .body(file.getFiledata());
     }
 
+    /**
+     * Handles GET request to delete files
+     * @param fileid                ID of file to be deleted
+     * @param redirectAttributes    A specialization of the Model interface that controllers
+     *                              can use to select attributes for a redirect scenario
+     * @return
+     */
     @GetMapping("/delete")
     public String deleteFile(@RequestParam Integer fileid, RedirectAttributes redirectAttributes){
 
         try {
+            // delete the file and store the result
             int result = this.fileService.deleteFile(fileid);
 
             if(result == 1) {
+                // success if result = 1
                 redirectAttributes.addFlashAttribute("successMessage", "File was was deleted!");
             } else {
+                // error otherwise
                 redirectAttributes.addFlashAttribute("errorMessage", "File was not deleted. Please try again!");
             }
+            // redirect
             return "redirect:/result";
         } catch(Exception e){
+            // handle exceptions
             redirectAttributes.addFlashAttribute("errorMessage", "There was an error deleting the file. Please try again!");
             return "redirect:/result";
         }
