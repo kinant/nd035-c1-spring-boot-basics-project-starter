@@ -53,19 +53,21 @@ public class FileController {
             } else if(result == 991) {
                 redirectAttributes.addFlashAttribute(MessageHelper.ATTR_ERROR, MessageHelper.FILE_ERROR_EXISTS);
             } else if(result == 992) {
-                redirectAttributes.addFlashAttribute(MessageHelper.ATTR_ERROR, MessageHelper.FILE_ERROR_SIZE_TOO_BIG);
-            } else if(result == 993) {
                 redirectAttributes.addFlashAttribute(MessageHelper.ATTR_ERROR, MessageHelper.FILE_ERROR_NO_FILE);
             } else {
                 redirectAttributes.addFlashAttribute(MessageHelper.ATTR_ERROR, MessageHelper.FILE_ERROR_CREATE);
             }
             return "redirect:/result";
         } catch(Exception e){
+
+            System.out.println("Exception caught?");
+            System.out.println(e.getClass().toString());
+            e.printStackTrace();
+
             redirectAttributes.addFlashAttribute(MessageHelper.ATTR_ERROR, MessageHelper.FILE_ERROR_UNKNOWN);
             return "redirect:/result";
         }
     }
-
 
     // https://knowledge.udacity.com/questions/271629
     @GetMapping("/download")

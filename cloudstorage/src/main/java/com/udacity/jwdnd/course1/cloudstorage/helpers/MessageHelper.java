@@ -44,6 +44,6 @@ public class MessageHelper {
     public static final String FILE_ERROR_CREATE = "File was not uploaded. Please try again!";
     public static final String FILE_ERROR_UNKNOWN = "There was an error uploading the file. Please try again!";
     public static final String FILE_ERROR_NO_FILE = "No file was selected! Please try again!";
-    public static final String FILE_ERROR_SIZE_TOO_BIG = "No file was selected! Please try again!";
+    public static final String FILE_ERROR_SIZE_TOO_BIG = "File size exceeds maximum! Please try again!";
     public static final String FILE_ERROR_EXISTS = "A File with that name already exists! Please try again!";
 }

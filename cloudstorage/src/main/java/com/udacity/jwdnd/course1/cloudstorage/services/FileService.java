@@ -3,6 +3,7 @@ package com.udacity.jwdnd.course1.cloudstorage.services;
 import com.udacity.jwdnd.course1.cloudstorage.auth.IAuthenticationFacade;
 import com.udacity.jwdnd.course1.cloudstorage.mapper.FileMapper;
 import com.udacity.jwdnd.course1.cloudstorage.model.File;
+import org.apache.tomcat.util.http.fileupload.impl.SizeLimitExceededException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -34,6 +35,11 @@ public class FileService {
 
     public int addFile(MultipartFile file) throws IOException {
         Integer userid = authenticationFacade.getAuthenticatedUserId();
+
+        if(file.getSize() == 0){
+            return 992;
+        }
+
         File f = new File (
                 null,
                 file.getOriginalFilename(),
@@ -44,7 +50,7 @@ public class FileService {
         );
 
         if(checkFileExists(file.getOriginalFilename())){
-            return 999;
+            return 991;
         }
 
         return fileMapper.addFile(f);
