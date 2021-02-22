@@ -1,5 +1,8 @@
 package com.udacity.jwdnd.course1.cloudstorage.model;
 
+/**
+ * Class to model a credential
+ */
 public class Credential {
     private Integer credentialid;
     private String url;

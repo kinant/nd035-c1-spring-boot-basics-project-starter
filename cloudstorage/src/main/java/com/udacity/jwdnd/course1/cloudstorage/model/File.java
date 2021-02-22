@@ -1,5 +1,8 @@
 package com.udacity.jwdnd.course1.cloudstorage.model;
 
+/**
+ * Class to model a file
+ */
 public class File {
     private Integer fileId;
     private String filename;
